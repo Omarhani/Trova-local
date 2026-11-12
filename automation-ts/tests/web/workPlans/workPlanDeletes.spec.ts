@@ -1,4 +1,5 @@
-import { MADE_PLANS } from '../../../src/api/services/workPlanApi';
+import { WORK_PLAN } from '../../../src/api/records/recordKeys';
+import { madeRecords } from '../../../src/records/madeRecords';
 import { runRecords } from '../../../src/run/runRecords';
 import { checkEquals, checkTrue } from '../../../src/report/checks';
 import { WorkPlansPage } from '../../../src/web/pages/WorkPlansPage';
@@ -83,5 +84,5 @@ test('testVerifyThatTheAdminCanDeleteTheWorkPlan', async ({ page }) => {
 
   checkEquals('Delete plan · toast', await plans.toastShows(PLAN_DELETED), PLAN_DELETED);
   checkTrue('Delete plan · the plan is gone from the list', await plans.planGone(plan.name));
-  runRecords.forget(MADE_PLANS, plan.name);
+  madeRecords.deletedByTest(WORK_PLAN, plan.name); // run 1033: the clean-up reads it back, never claims it gone
 });

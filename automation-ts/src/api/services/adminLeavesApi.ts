@@ -7,7 +7,9 @@ import { listOf, Row } from '../rows';
 
 /** the requests list's status words by StatusId (1 approved, 2 pending, 3 rejected, 4 deleted) */
 const STATUS_WORDS: Readonly<Record<number, string>> = { 1: 'مقبول', 2: 'تحت الاجراء', 3: 'مرفوض', 4: 'محذوف' };
-const DELETED = STATUS_WORDS[4];
+/** the list's word for a deleted request - it stays in the list with this status */
+export const DELETED_LEAVE = STATUS_WORDS[4];
+const DELETED = DELETED_LEAVE;
 
 /** the list's words for a StatusId; the number itself when the list has no word for it */
 export function statusWord(statusId: unknown): string {

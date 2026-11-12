@@ -1,19 +1,14 @@
 import { trovaTest as test } from '../../../src/run/trovaTest';
 import { AppApi } from '../../../src/api/appApi';
-import { InvoiceApi, MADE_INVOICES } from '../../../src/api/services/invoiceApi';
+import { invoiceKind } from '../../../src/api/records/invoiceKind';
+import { InvoiceApi } from '../../../src/api/services/invoiceApi';
 import { param } from '../../../src/run/blockParams';
 import { runLogin } from '../../../src/run/credentials';
-import { runRecords } from '../../../src/run/runRecords';
-import { checkEquals } from '../../../src/report/checks';
+import { cleanUpRun } from '../../../src/records/cleanUpByIds';
+import { once } from '../../../src/records/recordKind';
 
-/** Clean-up of the Invoices suite (InvoicesApiTests): cancels the invoices this run made (the app has no delete for an invoice). */
+/** Clean-up of the Invoices suite (InvoicesApiTests): cancels by id the invoices this run made (the app has no delete), each read back Cancelled. */
 test('cleanUpInvoicesProgrammatically', async () => {
-  const ids = runRecords.newestFirst(MADE_INVOICES);
-  test.skip(ids.length === 0, 'Nothing was kept by this run - nothing to cancel');
-  const invoices = new InvoiceApi(await AppApi.signedInAs(runLogin(param('signedInAs', 'Admin')), 'web'));
-  for (const id of ids) {
-    await invoices.cancel(id, 'Automation clean-up');
-    checkEquals(`Clean-up · invoice ${id} is cancelled`, await invoices.status(id), 'Cancelled');
-    runRecords.forget(MADE_INVOICES, id);
-  }
+  const login = runLogin(param('signedInAs', 'Admin'));
+  await cleanUpRun([invoiceKind(once(async () => new InvoiceApi(await AppApi.signedInAs(login, 'web'))))]);
 });

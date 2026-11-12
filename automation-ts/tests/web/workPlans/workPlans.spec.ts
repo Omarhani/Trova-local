@@ -5,6 +5,7 @@ import { time24 } from '../../../src/data/workPlanValues';
 import { param } from '../../../src/run/blockParams';
 import { runRecords } from '../../../src/run/runRecords';
 import { checkEquals } from '../../../src/report/checks';
+import { runSignInLine } from '../../../src/records/runSignInLine';
 import { refusedPage } from '../../../src/web/pageFacts';
 import { ShiftEmployeePicker } from '../../../src/web/pages/ShiftEmployeePicker';
 import { WorkPlanCalendar } from '../../../src/web/pages/WorkPlanCalendar';
@@ -30,7 +31,7 @@ function seenAmong(shown: string[], want: string): string {
 /** passes only when the app really opened signed in (the page fixture signs in once per run and proves it) */
 test('logInProgrammatically', async ({ page }) => {
   const opened = refusedPage(page.url()) ? 'the sign-in page' : 'the app, signed in';
-  checkEquals('Sign-in · what the app opened', opened, 'the app, signed in');
+  checkEquals(`${runSignInLine()} - what the app opened`, opened, 'the app, signed in');
 });
 
 test('testVerifyThatTheAdminCanAddANewWorkPlan', async ({ page }) => {

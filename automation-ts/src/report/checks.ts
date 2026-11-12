@@ -30,6 +30,16 @@ export function checkFalse(what: string, actual: boolean): void {
   settle(what, !actual, happened(what, !actual, actual ? 'it was true' : '', hide));
 }
 
+/**
+ * a line in the step's own words (a set-up's "Made employee id 512", a clean-up's "Deleted work plan id 41", or its
+ * "Expected: ... / Actual: ..."), shown as a check; stop = a failed one ends the test with that line
+ */
+export function checkLine(line: string, ok: boolean, stop = true): void {
+  const shown = happened(line, ok, '', hide);
+  if (stop) settle(line, ok, shown);
+  else report(line, ok, shown);
+}
+
 const listeners = new Set<() => void>();
 
 /** someone who acts after every check (the phone takes its picture); gives back how to stop */

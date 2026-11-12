@@ -1,6 +1,7 @@
 import { approvedEmployeeOfRun } from '../../../src/api/flows/runEmployeeMaker';
 import { LEAVE_APPROVED, LEAVE_PENDING, LEAVE_REJECTED } from '../../../src/api/services/leaveRequestsApi';
 import { checkEquals, checkFalse, checkTrue } from '../../../src/report/checks';
+import { runSignInLine } from '../../../src/records/runSignInLine';
 import { refusedPage } from '../../../src/web/pageFacts';
 import { LeavesPage } from '../../../src/web/pages/LeavesPage';
 import { webTest as test } from '../../../src/web/webTest';
@@ -19,7 +20,7 @@ const REJECTED = 'مرفوض';
 
 /** passes only when the app really opened signed in (the page fixture signs in once per run and proves it) */
 test('logInProgrammatically', async ({ page }) => {
-  checkFalse('Sign-in · the admin opened the app signed in', refusedPage(page.url()));
+  checkFalse(`${runSignInLine()} - the app opened signed in`, refusedPage(page.url()));
 });
 
 test('testVerifyThatTheAdminCanAcceptALeaveRequestSentFromTheApp', async ({ page }) => {

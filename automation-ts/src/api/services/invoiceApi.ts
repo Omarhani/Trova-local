@@ -1,7 +1,8 @@
 import { AppApi, ok } from '../appApi';
+import { INVOICE } from '../records/recordKeys';
 
 /** run records kind: the ids of the invoices this run made */
-export const MADE_INVOICES = 'invoiceIds';
+export const MADE_INVOICES = INVOICE.key;
 
 type Row = Record<string, unknown>;
 

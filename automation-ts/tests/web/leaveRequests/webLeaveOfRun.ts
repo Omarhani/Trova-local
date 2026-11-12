@@ -1,5 +1,6 @@
 import { adminLogin } from '../../../src/api/flows/employeeValues';
 import { AppApi } from '../../../src/api/appApi';
+import { WEB_LEAVE } from '../../../src/api/records/recordKeys';
 import { AdminLeavesApi } from '../../../src/api/services/adminLeavesApi';
 import { fullName, NewEmployee } from '../../../src/data/newEmployee';
 import { dayPlus } from '../../../src/data/overtimeDays';
@@ -12,7 +13,7 @@ import { userIdOf } from '../../api/attendance/movementsOfRun';
 export { webLeaveRecords } from '../../../src/data/webLeaveLeftovers';
 
 /** run records kind: employee + note of each leave the admin added for the run's employee (the clean-up deletes those left) */
-export const MADE_WEB_LEAVES = 'web_leave_keys';
+export const MADE_WEB_LEAVES = WEB_LEAVE.key;
 
 /** every leave this suite makes has a note that starts so - a leftover of this kind on the same days is the run's own */
 export const WEB_LEAVE_KIND = 'Trova web leave';

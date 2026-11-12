@@ -5,6 +5,7 @@ import { param } from '../../../src/run/blockParams';
 import { runLogin } from '../../../src/run/credentials';
 import { runRecords } from '../../../src/run/runRecords';
 import { checkContains, checkFalse, checkTrue } from '../../../src/report/checks';
+import { runSignInLine } from '../../../src/records/runSignInLine';
 import { refusedPage } from '../../../src/web/pageFacts';
 import { InvoicesPage } from '../../../src/web/pages/InvoicesPage';
 import { webTest as test } from '../../../src/web/webTest';
@@ -13,7 +14,7 @@ import { webTest as test } from '../../../src/web/webTest';
 
 /** passes only when the app really opened signed in (the page fixture signs in once and refuses a sign-in page) */
 test('logInProgrammatically', async ({ page }) => {
-  checkFalse('Sign-in · the app opened signed in', refusedPage(page.url()));
+  checkFalse(`${runSignInLine()} - the app opened signed in`, refusedPage(page.url()));
 });
 
 test('testAdminCreatesAnInvoice', async ({ page }) => {
