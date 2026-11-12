@@ -65,3 +65,19 @@ test('testVerifyThatTheAppOpensSignedInWithTheKeptSignIn', async ({ phone }) => 
   const shown = await home.greeting();
   checkEquals('Home greeting', shown, expectedGreeting(shown, e.firstName));
 });
+
+/**
+ * Omar 2026-11-12 (run 985): the trap of the optional pop-up rule - the same flow (Android's location question may or may
+ * not appear and is handled), but the case expects a name the app does not have: it must FAIL every time, never pass
+ * because the pop-up was handled.
+ */
+test('testTrapTheAppOpensSignedInWithAWrongGreeting', async ({ phone }) => {
+  const e = await approvedEmployeeOfRun();
+  const home = new HomeAccount(phone);
+  if (!(await home.isShown(20))) await signInAs(phone, e);
+  await home.reopenApp(testData.mobile().appPackage);
+
+  checkTrue('App opened again · home shows with no sign-in', await home.isShown(30));
+  const shown = await home.greeting();
+  checkEquals('Trap · home greets the employee as the case expects', shown, expectedGreeting(shown, `${e.firstName} Trap`));
+});
