@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<!-- Java web/webLeavesTests.xml: the admin adds a leave for the run's own employee on the web, then deletes it (Java's "Clean up - delete leave" block, a case here). Hybrid: one sign-in by quick calls, the employee made and deleted by API. -->
+<!-- Java web/webLeavesTests.xml: the admin adds a leave for the run's own employee on the web, then deletes it (Java's "Clean up - delete leave" block, a case here); every leave the run made and did not delete is deleted by API before the employee (run 994). Hybrid: one sign-in by quick calls, the employee made and deleted by API. -->
 <suite name="Leaves on the web (TS)">
     <parameter name="browser" value="${browserType}"/>
     <parameter name="signedInAs" value="Admin"/>
@@ -41,6 +41,14 @@
         <classes>
             <class name="ts:tests/web/leaveRequests/adminLeaves.spec.ts">
                 <methods><include name="testVerifyThatTheAdminCanDeleteTheEmployeesLeaveFromTheWeb"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - delete the run's leaves by API">
+        <classes>
+            <class name="ts:tests/api/leaves/webLeaveCleanUp.spec.ts">
+                <methods><include name="cleanUpWebLeavesProgrammatically"/></methods>
             </class>
         </classes>
     </test>

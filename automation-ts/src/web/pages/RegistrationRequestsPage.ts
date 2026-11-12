@@ -91,8 +91,9 @@ export class RegistrationRequestsPage extends WebActions {
     await this.click(this.saveButton, 10, 'Save');
   }
 
-  async toastText(): Promise<string> {
-    return this.messageOf(this.successToast, 15);
+  /** the first message shown since the click (Save), waited up to 15 s; "" when none came */
+  async toastText(seconds = 15): Promise<string> {
+    return this.firstToastAfterAction(this.successToast, seconds);
   }
 
   async waitForDrawerToClose(): Promise<boolean> {

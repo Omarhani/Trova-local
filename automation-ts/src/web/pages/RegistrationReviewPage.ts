@@ -65,8 +65,9 @@ export class RegistrationReviewPage extends WebActions {
     return allTicked;
   }
 
-  async toastShows(expected: string): Promise<string> {
-    return this.textBecomes(this.toast, expected, 15);
+  /** the toast once it reads expected - shown since the click (waited up to 15 s); the last one seen, "" when none came */
+  async toastShows(expected: string, seconds = 15): Promise<string> {
+    return this.toastAfterAction(this.toast, expected, seconds);
   }
 
   /** no row with the e-mail any more, waited for on this page (it refreshes itself) */
