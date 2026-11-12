@@ -25,10 +25,23 @@ export class HomeScreen extends PhoneActions {
     return this.isPresent(this.selfServicesButton, 20);
   }
 
-  /** true when home offers Check-Out now (the employee is already checked in) */
-  async offersCheckOut(seconds: number): Promise<boolean> {
-    const s = await this.lookUntil((x) => x.has(this.checkOutButton) || x.has(this.checkInButton), seconds);
-    return s !== undefined && s.has(this.checkOutButton);
+  /**
+   * true when home offers Check-Out (the employee is checked in), false when it offers Check-In - read only once home shows
+   * one of the two and still shows it 4 s later. Run 1001: a home still loading showed neither and was read as "not
+   * checked in"; now neither within the wait is a plain failure, never a guess.
+   */
+  async offersCheckOut(seconds = 60): Promise<boolean> {
+    const offer = (s: ScreenSnapshot): string | undefined =>
+      s.has(this.checkOutButton) ? 'Check-Out' : s.has(this.checkInButton) ? 'Check-In' : undefined;
+    const deadline = Date.now() + seconds * 1000;
+    while (Date.now() < deadline) {
+      const s = await this.lookUntil((x) => offer(x) !== undefined, Math.max(1, (deadline - Date.now()) / 1000));
+      if (!s) break;
+      const seen = offer(s);
+      if (!(await this.lookUntil((x) => offer(x) !== undefined && offer(x) !== seen, STEADY_SECONDS))) return seen === 'Check-Out';
+      console.log(`Home flipped from ${seen} (the app reloaded) - waiting again`);
+    }
+    throw new Error(`Home showed neither Check-In nor Check-Out within ${seconds} s`);
   }
 
   async waitUntilReadyToCheckIn(): Promise<void> {

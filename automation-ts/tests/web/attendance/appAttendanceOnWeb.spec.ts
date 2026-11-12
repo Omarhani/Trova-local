@@ -2,11 +2,13 @@ import { approvedEmployeeOfRun } from '../../../src/api/flows/runEmployeeMaker';
 import { fullName, NewEmployee } from '../../../src/data/newEmployee';
 import { time24 } from '../../../src/data/workPlanValues';
 import { param } from '../../../src/run/blockParams';
+import { blockedSkip } from '../../../src/report/blockedSkip';
 import { checkEquals } from '../../../src/report/checks';
 import { AttendanceReportPage } from '../../../src/web/pages/AttendanceReportPage';
 import { TransactionsPage } from '../../../src/web/pages/TransactionsPage';
 import { webTest as test } from '../../../src/web/webTest';
-import { movementsOn, timesBecome, timesOf, today } from '../../api/attendance/movementsOfRun';
+import { movementsOn, timesBecome, today } from '../../api/attendance/movementsOfRun';
+import { appMovementsMissing } from './appMovementsNeeded';
 import { checkReportFigures, reportFiguresExpected } from './reportFigures';
 
 /**
@@ -16,12 +18,10 @@ import { checkReportFigures, reportFiguresExpected } from './reportFigures';
  * in and out on the app today ("Set-up - check in and out on the app" - an app check in has no call a run may make).
  */
 
-/** the case's record: today's app check in and check out of the run's employee, else a plain set-up stop */
+/** the case's record: today's app check in and check out of the run's employee, else the case is skipped (BLOCKED, data) */
 async function requireAppMovements(e: NewEmployee): Promise<void> {
-  const app = await movementsOn(e);
-  if (timesOf(app, 'check in').length === 0 || timesOf(app, 'check out').length === 0) {
-    throw new Error(`Set-up: ${e.userName} has no check in and check out on the app today - run "Set-up - check in and out on the app" first`);
-  }
+  const missing = appMovementsMissing(await movementsOn(e));
+  if (missing) blockedSkip(test.info(), 'data', missing);
 }
 
 test('testVerifyThatTheAdminCanUpdateTheAppCheckInAndOutFromTheWeb', async ({ page }) => {
