@@ -16,6 +16,13 @@ public class AppApi extends ApiClient {
         return api;
     }
 
+    /** no API address saved for the env = the web app's own host (its calls go to <web>/api/...) */
+    @Override
+    protected String baseUri() {
+        String api = utils.TestData.apiUrl();
+        return api == null || api.isBlank() ? utils.TestData.webUrl() : api;
+    }
+
     @Override
     protected java.util.Map<String, String> signInValues() { // Omar 2026-10-27: the ids a known body needs
         return login == null ? java.util.Map.of() : utils.ApiSignIn.values(login);

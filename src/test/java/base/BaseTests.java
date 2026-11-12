@@ -111,6 +111,13 @@ public class BaseTests implements IHookable {
 
     // Page Objects - add your app's pages here
     public HomePage homePage;
+    public LeavesPage leavesPage;
+    public LoginPage loginPage;
+    public RegistrationRequestsPage registrationRequestsPage;
+    public OvertimeSettingsPage overtimeSettingsPage;
+    public OvertimeRequestsPage overtimeRequestsPage;
+    public WorkPlansPage workPlansPage;
+    public InvoicesPage invoicesPage;
 
     protected String currentBrowser;
 
@@ -139,6 +146,13 @@ public class BaseTests implements IHookable {
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
         // your project's page objects
         homePage = new HomePage(driver);
+        leavesPage = new LeavesPage(driver);
+        loginPage = new LoginPage(driver);
+        registrationRequestsPage = new RegistrationRequestsPage(driver);
+        overtimeSettingsPage = new OvertimeSettingsPage(driver);
+        overtimeRequestsPage = new OvertimeRequestsPage(driver);
+        workPlansPage = new WorkPlansPage(driver);
+        invoicesPage = new InvoicesPage(driver);
     }
 
     @AfterMethod(groups = "Web")
