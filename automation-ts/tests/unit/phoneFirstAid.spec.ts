@@ -70,7 +70,7 @@ test('the network or the phone let it down (ENVIRONMENT): the step is BLOCKED, n
   const e = await new LoginScreen(phone, aid({ helped: false, did: '', cause: 'ENVIRONMENT', proof: 'no connection' })).signIn().catch((x) => x);
   expect(e).toBeInstanceOf(SetUpProblem);
   expect(kindOf(String(e)).kind).toBe('setup');
-  expect(e.message).toContain('Not checked');
+  expect(e.message).toContain('The test could not finish'); // Omar 2026-11-12 (run 985): never "Not checked"
   expect(e.message).toContain('no connection');
 });
 
@@ -78,7 +78,7 @@ test('helped but our step still cannot find its element (OUR_CODE): BLOCKED - ou
   const { phone } = phoneShowing(EMPTY);
   const e = await new LoginScreen(phone, aid({ helped: true, did: 'opened the menu', cause: 'OUR_CODE', proof: 'the button was renamed' })).signIn().catch((x) => x);
   expect(e).toBeInstanceOf(SetUpProblem);
-  expect(e.message).toBe('Not checked - our test step needs a look: the button was renamed');
+  expect(e.message).toBe('The test needs an update - the app looks fine: the button was renamed');
 });
 
 test('helped with an unclear cause and still not there: still stuck, in plain words', async () => {

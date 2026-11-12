@@ -133,14 +133,14 @@ test('the network or the browser let it down: the case is BLOCKED with what the 
   const guard = new SignedOutStep(async (): Promise<HelpAnswer> => ({ helped: false, did: '', cause: 'ENVIRONMENT', proof: 'the page never loaded - no connection' }));
   const e = await guard.act(page, failingThen(timeout(), 1)).catch((x: Error) => x);
   expect(e).toBeInstanceOf(SetUpProblem);
-  expect((e as Error).message).toBe('Not checked - the network, browser or computer let it down: the page never loaded - no connection');
+  expect((e as Error).message).toBe('The test could not finish - the network, browser or computer let it down: the page never loaded - no connection');
 });
 
 test('our own step was stuck and the AI could not get past it: BLOCKED "needs a look", never a failure of the app', async () => {
   const guard = new SignedOutStep(async (): Promise<HelpAnswer> => ({ helped: false, did: 'no menu', cause: 'OUR_CODE', proof: 'the menu item is named differently now' }));
   const e = await guard.act(page, failingThen(timeout(), 1)).catch((x: Error) => x);
   expect(e).toBeInstanceOf(SetUpProblem);
-  expect((e as Error).message).toBe('Not checked - our test step needs a look: the menu item is named differently now');
+  expect((e as Error).message).toBe('The test needs an update - the app looks fine: the menu item is named differently now');
 });
 
 test('our own step still stuck after the AI got past it (a renamed element): BLOCKED "needs a look", never FAILED', async () => {
@@ -148,5 +148,5 @@ test('our own step still stuck after the AI got past it (a renamed element): BLO
   const always = async () => { throw timeout(); };
   const e = await guard.act(page, always).catch((x: Error) => x);
   expect(e).toBeInstanceOf(SetUpProblem);
-  expect((e as Error).message).toBe('Not checked - our test step needs a look: the link is named differently on the page');
+  expect((e as Error).message).toBe('The test needs an update - the app looks fine: the link is named differently on the page');
 });

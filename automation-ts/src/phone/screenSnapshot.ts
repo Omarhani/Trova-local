@@ -6,8 +6,8 @@ import { elements } from './pageTree';
 /** the package part of an Android resource id ("com.app:id/") */
 const ID_PACKAGE = /^.*:id\//;
 
-/** run 870: a step whose element this cannot read is our own step - Not checked, in plain words (never its XPath) */
-const UNREADABLE = 'Not checked - our test step needs a look: it names its element in a way Trova cannot read on the phone screen';
+/** run 870: a step whose element this cannot read is our own step, in plain words (never its XPath); run 985: no "Not checked" */
+const UNREADABLE = 'The test needs an update - the app looks fine: the test names a button or field in a way Trova cannot find on the phone screen';
 
 /** one element of the screen as the phone's page tree gives it */
 export interface ScreenNode {
