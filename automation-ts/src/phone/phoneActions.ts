@@ -11,6 +11,7 @@ import { Phone } from './phoneSession';
 import { phoneAid, PhoneAid } from './phoneHelpAsk';
 import { lookWithHelp, notShownWords } from './phoneStepHelp';
 import { lookPastQuestions } from './permissionQuestion';
+import { answerOf, optionalPopupSeconds, popupKind, popupNote, questionWords, systemPopup } from './optionalPopup';
 
 /** the time between two looks at the screen - never a fixed sleep (the AI-run tools read the screen in about 0.2 s) */
 const LOOK_EVERY_MS = 200;
@@ -26,9 +27,29 @@ export class PhoneActions {
   constructor(protected readonly phone: Phone, private readonly aid: PhoneAid = phoneAid) {}
 
   protected async tap(selector: string, seconds: number, element = selector): Promise<void> {
+    if (systemPopup(selector)) return this.tapPopup(selector, seconds, element); // Omar 2026-11-12 (run 985): may or may not appear
     const [x, y] = await this.sayAt('click', element, selector, seconds); // the run screen's word ("tap" read as "tab")
     await this.shell('input', 'tap', String(x), String(y));
     this.picture();
+  }
+
+  /**
+   * Omar 2026-11-12 (Test 8094 run 985, case 519): a step on Android's own permission question - it may or may not
+   * appear, and that never decides the case. There: answered as the step says, with a warning. Not there within its
+   * wait (3 s at most): the step is skipped with a warning - no AI help, no failure. The case's own checks decide.
+   */
+  private async tapPopup(selector: string, seconds: number, element: string): Promise<void> {
+    const s = await this.lookUntil((x) => x.has(selector), optionalPopupSeconds(seconds));
+    const at = s?.middle(selector);
+    if (!s || !at) {
+      this.say('click', `${element} - not asked this time, skipped`, selector);
+      popupNote(popupKind(element), false, element, answerOf(selector));
+      return;
+    }
+    this.say('click', element, selector, s.mark(selector) ?? {});
+    await this.shell('input', 'tap', String(at[0]), String(at[1]));
+    this.picture();
+    popupNote(popupKind(questionWords(s) || element), true, element, answerOf(selector));
   }
 
   /** a tap at a point, for an icon with no element of its own (placed from the element it sits on) */
@@ -103,7 +124,7 @@ export class PhoneActions {
   private async sayAt(action: string, element: string, selector: string, seconds: number, value: ValueFields | Record<string, never> = {}): Promise<[number, number]> {
     const stack = new Error().stack; // the screen's step that called, before the first wait
     const look = (n: number): Promise<ScreenSnapshot | undefined> =>
-      lookPastQuestions((match, k) => this.lookUntil(match, k), (xy) => this.allowQuestion(xy), selector, n); // run 870
+      lookPastQuestions((match, k) => this.lookUntil(match, k), (xy, seen) => this.allowQuestion(xy, seen), selector, n); // run 870
     const { screen: s, fail } = await lookWithHelp(look, this.aid,
       { screen: this.constructor.name, element, selector, action, seconds, stack });
     const at = s?.middle(selector);
@@ -113,10 +134,11 @@ export class PhoneActions {
   }
 
   /** Android's permission question answered "allow", said as its own step on the run page */
-  private async allowQuestion([x, y]: [number, number]): Promise<void> {
+  private async allowQuestion([x, y]: [number, number], seen: ScreenSnapshot): Promise<void> {
     this.say('click', "Allow (Android's permission question)", 'Android permission question');
     await this.shell('input', 'tap', String(x), String(y));
     this.picture();
+    popupNote(popupKind(questionWords(seen)), true, "Allow (Android's permission question)"); // Omar 2026-11-12: a warning, never a failure
   }
 
   /** the live view's picture of the step just done (one every 600 ms at most; the test never waits for it) */

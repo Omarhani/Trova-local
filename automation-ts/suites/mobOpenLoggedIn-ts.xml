@@ -32,6 +32,18 @@
         </classes>
     </test>
 
+    <!-- Omar 2026-11-12 (run 985): the optional pop-up rule's trap - the pop-up handled, the check wrong: designed end FAILED -->
+    <test name="Case - Trap - the app opens signed in but greets another name ends Failed">
+        <parameter name="trap" value="true"/>
+        <parameter name="keepAppData" value="true"/>
+        <groups><run><include name="Mob"/></run></groups>
+        <classes>
+            <class name="ts:tests/mobile/employeeAccount/employeeAccount.spec.ts">
+                <methods><include name="testTrapTheAppOpensSignedInWithAWrongGreeting"/></methods>
+            </class>
+        </classes>
+    </test>
+
     <test name="Clean up - sign the app out">
         <parameter name="keepAppData" value="true"/>
         <groups><run><include name="Mob"/></run></groups>
