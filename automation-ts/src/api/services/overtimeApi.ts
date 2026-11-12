@@ -1,3 +1,4 @@
+import { accountClock } from '../../data/appClock';
 import { appAnswer } from '../appAnswer';
 import { AppApi, ok } from '../appApi';
 
@@ -29,7 +30,7 @@ export class OvertimeApi {
 
   /** the manager's list of this year's requests, newest first */
   static async list(manager: AppApi): Promise<OvertimeRow[]> {
-    const year = new Date().getFullYear();
+    const year = accountClock.wallNow().getFullYear();
     const body = { pageNumber: 1, pageSize: 100, TimeZoneOffset: -180, Language: 0,
                    data: { SearchTerm: '', DepartmentsIDs: [], DateFrom: `${year}-01-01`, DateTo: `${year}-12-31`,
                            AssignToMe: false, EmployeeGroups: [] } };

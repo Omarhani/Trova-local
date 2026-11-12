@@ -21,6 +21,8 @@ export interface LeaveRow extends LeaveSpan {
   StatusId: number;
   TypeID?: number;
   Notes?: string | null;
+  /** when the server saved it, on its own clock (run 1025: "2026-11-13T00:05:26.88" at 23:05 here) */
+  CreatedDate?: string | null;
 }
 
 /** StatusId of a request still waiting for the manager */

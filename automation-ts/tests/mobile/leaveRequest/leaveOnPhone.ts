@@ -1,6 +1,7 @@
 import { madeEmployeeLeaves } from '../../../src/api/flows/madeEmployeePhone';
 import { approvedEmployeeOfRun } from '../../../src/api/flows/runEmployeeMaker';
 import { LeaveRequestsApi, LeaveRow } from '../../../src/api/services/leaveRequestsApi';
+import { accountClock } from '../../../src/data/appClock';
 import { freeLeaveDay, weekendOf } from '../../../src/data/leaveDay';
 import { leaveKindOf } from '../../../src/data/leaveTypes';
 import { NewEmployee } from '../../../src/data/newEmployee';
@@ -27,7 +28,7 @@ export async function employeeLeaves(e: NewEmployee): Promise<LeaveRequestsApi> 
 /** set-up by API: the leave type from the app's own list and a free working day after today; the employee's requests now */
 export async function leavePlan(leaves: LeaveRequestsApi): Promise<{ toSend: LeaveToSend; rows: LeaveRow[] }> {
   const rows = await leaves.list();
-  const today = new Date();
+  const today = accountClock.wallNow(); // the app's day, never the computer's (run 1025)
   const day = freeLeaveDay(rows, today, weekendOf(param('leave_weekend', 'Fri,Sat')));
   const kind = leaveKindOf(await leaves.kinds(), param('leave_type', 'Sick leave'));
   return { toSend: { kind, day, today, note: param('leave_note', 'Trova leave {run}') }, rows };

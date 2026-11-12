@@ -1,3 +1,4 @@
+import { accountClock } from '../../data/appClock';
 import { dayOf, workDayOf } from '../../data/workPlanValues';
 import { appAnswer } from '../appAnswer';
 import { AppApi, ok } from '../appApi';
@@ -11,7 +12,7 @@ const CURRENT_AND_FUTURE = 2;
  * starts Friday while the calendar shows it from Sunday - deleting from Sunday only moved its end and left it linked);
  * never before tomorrow; the next working day when the app gives no start day
  */
-export function shiftDeleteDay(startDate: unknown, from: Date = new Date()): string {
+export function shiftDeleteDay(startDate: unknown, from: Date = accountClock.wallNow()): string {
   const start = /^\d{4}-\d{2}-\d{2}/.exec(String(startDate ?? ''))?.[0];
   if (!start) return workDayOf('tomorrow', from);
   const tomorrow = dayOf('tomorrow', from);
@@ -75,8 +76,8 @@ export class WorkPlanCleanUpApi {
 
   /** the ids of the plan's shifts from today to 31 days on */
   private async shiftIds(planId: string): Promise<string[]> {
-    const from = dayOf('', new Date(Date.now() - 86_400_000));
-    const to = dayOf('', new Date(Date.now() + 31 * 86_400_000));
+    const from = dayOf('', accountClock.wallAt(Date.now() - 86_400_000));
+    const to = dayOf('', accountClock.wallAt(Date.now() + 31 * 86_400_000));
     const data = { DepartmentList: [], search_type: 'shift', sDate: from, eDate: to, EmployeeList: [], ShiftName: '',
                    HolidayName: '', WorkPlanIds: [planId] };
     const answer = ok(await this.admin.post(this.path('WorkPlan/GetAllShiftsByWorkPlan'), { data }), 'WorkPlan/GetAllShiftsByWorkPlan');

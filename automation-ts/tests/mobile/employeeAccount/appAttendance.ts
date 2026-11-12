@@ -4,6 +4,7 @@ import { Phone } from '../../../src/phone/phoneSession';
 import { AttendanceScreen } from '../../../src/phone/screens/AttendanceScreen';
 import { HomeAccount } from '../../../src/phone/screens/HomeAccount';
 import { HomeScreen } from '../../../src/phone/screens/HomeScreen';
+import { checkOutOfferedOrDayChanged } from './checkInDayChange';
 import { signInAs } from './employeeOnPhone';
 
 /**
@@ -17,13 +18,17 @@ export async function homeAs(phone: Phone, e: NewEmployee): Promise<HomeScreen> 
   return new HomeScreen(phone);
 }
 
-/** Check-In > the attendance button > the app's answer > home on Check-Out with "Check in" as the last activity */
-export async function checkInOnTheApp(home: HomeScreen, attendance: AttendanceScreen, part: string): Promise<void> {
+/**
+ * Check-In > the attendance button > the app's answer > home on Check-Out with "Check in" as the last activity; at the
+ * hour the app's day changed (run 1026) home cannot offer Check-Out - BLOCKED with the reason (checkInDayChange)
+ */
+export async function checkInOnTheApp(home: HomeScreen, attendance: AttendanceScreen, part: string, e: NewEmployee): Promise<void> {
   await home.waitUntilReadyToCheckIn();
   await home.openCheckIn();
+  const tappedAt = Date.now();
   checkEquals(`${part} · the app says it was saved`, await attendance.submit(), 'success');
   await attendance.backToHomeIfShown();
-  await home.waitUntilCheckOutIsAvailable();
+  await checkOutOfferedOrDayChanged(home, e, part, tappedAt);
   checkTrue(`${part} · home shows "Check in" as the last activity`, await home.checkInLastActivityIsShown());
 }
 

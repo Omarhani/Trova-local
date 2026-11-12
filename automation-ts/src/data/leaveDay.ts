@@ -6,7 +6,7 @@ export interface LeaveSpan {
 
 const DAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
-/** a day as yyyy-MM-dd on this computer's calendar (the phone's, on the same desk) */
+/** a day as yyyy-MM-dd, the Date's own calendar day (the app's day when the Date is the app clock's wall time) */
 export function ymd(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }

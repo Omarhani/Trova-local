@@ -1,3 +1,4 @@
+import { accountClock } from '../data/appClock';
 import { Json, JsonObject } from './json';
 
 /**
@@ -96,11 +97,12 @@ function placeholderName(v: Json): string | undefined {
 }
 
 function time(name: string): string | undefined {
-  const day = (plus: number): string => new Date(Date.now() + plus * 86_400_000).toISOString().slice(0, 10);
+  // the app's own clock (its account's), never the computer's - run 1025: at 23:30 here the app was already on the next day
+  const at = (plusMs: number): string => new Date(Date.now() + plusMs + accountClock.offsetMin() * 60_000).toISOString();
   switch (norm(name)) {
-    case 'today': case 'date': return day(0);
-    case 'tomorrow': return day(1);
-    case 'now': case 'datetime': return new Date().toISOString().slice(0, 19);
+    case 'today': case 'date': return at(0).slice(0, 10);
+    case 'tomorrow': return at(86_400_000).slice(0, 10);
+    case 'now': case 'datetime': return at(0).slice(0, 19);
     default: return undefined;
   }
 }

@@ -2,6 +2,7 @@ import { adminLogin } from '../../../src/api/flows/employeeValues';
 import { AppApi } from '../../../src/api/appApi';
 import { MADE_PLANS, WorkPlanApi } from '../../../src/api/services/workPlanApi';
 import { WorkPlanCleanUpApi } from '../../../src/api/services/workPlanCleanUpApi';
+import { webPageNow } from '../../../src/data/appClock';
 import { dayOf, workDayOf } from '../../../src/data/workPlanValues';
 import { param } from '../../../src/run/blockParams';
 import { runRecords } from '../../../src/run/runRecords';
@@ -17,7 +18,7 @@ export const SHIFTS_WITH_EMPLOYEE = 'work_plan_shifts_with_employee';
  * formDay: the start date the shift form shows by itself (tomorrow, as Java checks); day: the first day the calendar
  * shows the shift (the plan's next working day - run 907: on Thursday the form says Friday, the calendar Sunday)
  */
-export function planValues(from: Date = new Date()): { plan: string; country: string; shift: string; formDay: string; day: string } {
+export function planValues(from: Date = webPageNow()): { plan: string; country: string; shift: string; formDay: string; day: string } {
   return {
     plan: param('plan_name', 'Omar WebPlan {run}'),
     country: param('plan_country', 'مصر'),

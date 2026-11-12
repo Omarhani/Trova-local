@@ -16,7 +16,7 @@ test('testVerifyThatTheEmployeeCanCheckInFromTheApp', async ({ phone }) => {
   const home = await homeAs(phone, e);
   const before = timesOf(await movementsOn(e), 'check in').length;
 
-  await checkInOnTheApp(home, new AttendanceScreen(phone), 'Check in');
+  await checkInOnTheApp(home, new AttendanceScreen(phone), 'Check in', e);
   checkEquals("API · the employee's check ins today went up by 1", await countBecomes(e, 'check in', before + 1), before + 1);
 });
 
@@ -25,7 +25,7 @@ test('testVerifyThatTheEmployeeCanCheckOutFromTheApp', async ({ phone }) => {
   const home = await homeAs(phone, e);
   const attendance = new AttendanceScreen(phone);
   // set-up: the case's own check in when the run left none open (a case run alone)
-  if (!(await home.offersCheckOut())) await checkInOnTheApp(home, attendance, 'Set-up');
+  if (!(await home.offersCheckOut())) await checkInOnTheApp(home, attendance, 'Set-up', e);
   const before = timesOf(await movementsOn(e), 'check out').length;
 
   await checkOutOnTheApp(home, attendance, 'Check out');
@@ -37,7 +37,7 @@ test('checkedInAndOutOnTheApp', async ({ phone }) => {
   const e = await approvedEmployeeOfRun();
   const home = await homeAs(phone, e);
   const attendance = new AttendanceScreen(phone);
-  if (!(await home.offersCheckOut())) await checkInOnTheApp(home, attendance, 'Set-up check in');
+  if (!(await home.offersCheckOut())) await checkInOnTheApp(home, attendance, 'Set-up check in', e);
   await checkOutOnTheApp(home, attendance, 'Set-up check out');
   const movements = await movementsOn(e);
   checkEquals('Set-up · API: the app check in and check out of today are there',

@@ -56,8 +56,7 @@ async function deleteDaysWhenShiftStarts(startDate: unknown): Promise<string[]> 
 }
 
 test('the shift is deleted from its own start day, not the next working day (run 918: starts Fri, calendar from Sun)', async () => {
-  const startsTomorrow = new Date(Date.now() + 86_400_000);
-  const day = `${startsTomorrow.getFullYear()}-${String(startsTomorrow.getMonth() + 1).padStart(2, '0')}-${String(startsTomorrow.getDate()).padStart(2, '0')}`;
+  const day = dayOf('tomorrow'); // tomorrow on the app's own clock, never the computer's (run 1025)
   expect(await deleteDaysWhenShiftStarts(`${day}T00:00:00`)).toEqual([endOfDayUtc(day)]);
 });
 

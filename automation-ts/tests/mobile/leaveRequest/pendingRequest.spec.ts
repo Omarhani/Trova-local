@@ -1,4 +1,5 @@
 import { LEAVE_PENDING } from '../../../src/api/services/leaveRequestsApi';
+import { accountClock } from '../../../src/data/appClock';
 import { dmy, ymd } from '../../../src/data/leaveDay';
 import { runRecords } from '../../../src/run/runRecords';
 import { checkEquals, checkTrue } from '../../../src/report/checks';
@@ -34,7 +35,7 @@ async function myRequestsAsTheEmployee(phone: Phone, e: NewEmployee, screen: Lea
 test('testVerifyThatThePendingRequestShowsItsDetailsInTheApp', async ({ phone }) => {
   const e = await leaveEmployee();
   const leaves = await employeeLeaves(e);
-  const { row, toSend } = await sentByApi(leaves, e);
+  const { row, toSend, sentAt } = await sentByApi(leaves, e);
   console.log(`Pre-condition - API: request ${row.ID} sent for ${ymd(toSend.day)} (the employee's next free working day)`);
   const screen = new LeaveRequestScreen(phone);
   await myRequestsAsTheEmployee(phone, e, screen, await leaves.list());
@@ -47,7 +48,8 @@ test('testVerifyThatThePendingRequestShowsItsDetailsInTheApp', async ({ phone })
   checkTrue(`Details · type is ${names.join(' / ')}`, names.some((n) => details.type.includes(n)), `seen "${details.type}"`);
   checkTrue('Details · status is Pending', PENDING_WORDS.includes(details.status), `seen "${details.status}"`);
   checkEquals('Details · start - end', `${details.start} - ${details.end}`, `${dmy(toSend.day)} - ${dmy(toSend.day)}`);
-  checkEquals('Details · submission date', details.submitted, dmy(toSend.today));
+  // the day it was sent on the app's own clock (run 1025: 23:05 here was already 13/11 for the app), never the computer's
+  checkEquals('Details · submission date', details.submitted, dmy(accountClock.wallAt(sentAt)));
   checkTrue('Details · request duration is one day', isOneDay(details.duration), `seen "${details.duration}"`); // run 720: Arabic too
   checkEquals('Details · notes', details.notes, toSend.note);
 });
