@@ -1,0 +1,85 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Java mob/mobLeaveRequest.xml: a NEW employee made by API for this run sends a leave request from the app and sees its details while Pending, then deletes a Pending request; the employee is deleted by API last. The admin decisions moved to leaveDecisions-ts. Hybrid: the admin signs in once by API for set-up and clean-up; the employee signs in ONCE on the phone app's API and once on its screens; the clean-up deletes by API only the requests this run sent, signs the app out, then deletes the employee. -->
+<suite name="Leave request from the phone (TS)">
+    <parameter name="signedInAs" value="Admin"/>
+    <parameter name="server" value="${serverType}"/>
+    <parameter name="employee_password_from" value="Mobile user"/>
+    <parameter name="employee_tag" value="mobLeave"/>
+    <parameter name="leave_type" value="Sick leave"/>
+    <parameter name="leave_weekend" value="Fri,Sat"/>
+    <parameter name="leave_note" value="Trova leave {run}"/>
+
+    <test name="Log in programmatically">
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeSetUp.spec.ts">
+                <methods><include name="logInProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Set-up - Create employee by API">
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeSetUp.spec.ts">
+                <methods><include name="approvedEmployeeProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 462 - Verify that an employee can send a leave request from the phone app">
+        <parameter name="keepAppData" value="true"/>
+        <groups><run><include name="Mob"/></run></groups>
+        <classes>
+            <class name="ts:tests/mobile/leaveRequest/leaveRequest.spec.ts">
+                <methods><include name="testVerifyThatAnEmployeeCanSendALeaveRequestFromThePhoneApp"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the Pending request shows its details in the app">
+        <parameter name="keepAppData" value="true"/>
+        <parameter name="leave_note" value="Trova leave details {run}"/>
+        <groups><run><include name="Mob"/></run></groups>
+        <classes>
+            <class name="ts:tests/mobile/leaveRequest/pendingRequest.spec.ts">
+                <methods><include name="testVerifyThatThePendingRequestShowsItsDetailsInTheApp"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the employee can delete a Pending request in the app">
+        <parameter name="keepAppData" value="true"/>
+        <parameter name="leave_note" value="Trova leave delete {run}"/>
+        <groups><run><include name="Mob"/></run></groups>
+        <classes>
+            <class name="ts:tests/mobile/leaveRequest/pendingRequest.spec.ts">
+                <methods><include name="testVerifyThatTheEmployeeCanDeleteAPendingRequestInTheApp"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - delete this run's leave request by API">
+        <classes>
+            <class name="ts:tests/mobile/leaveRequest/leaveRequest.spec.ts">
+                <methods><include name="cleanUpLeaveRequestsProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - sign the app out">
+        <parameter name="keepAppData" value="true"/>
+        <groups><run><include name="Mob"/></run></groups>
+        <classes>
+            <class name="ts:tests/mobile/employeeAccount/appSignOut.spec.ts">
+                <methods><include name="signOutOfTheAppProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - delete employee by API">
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeSetUp.spec.ts">
+                <methods><include name="cleanUpEmployeesProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

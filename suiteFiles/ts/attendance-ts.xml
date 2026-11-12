@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Phone attendance (TS)">
+    <test name="Case - Verify that an employee can sign in on the phone and check in">
+        <parameter name="signedInAs" value="Mobile user"/>
+        <parameter name="server" value="Test"/>
+        <groups><run><include name="Mob"/></run></groups>
+        <classes>
+            <class name="ts:tests/mobile/attendance/attendance.spec.ts">
+                <methods><include name="testVerifyThatAnEmployeeCanSignInOnThePhoneAndCheckIn"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

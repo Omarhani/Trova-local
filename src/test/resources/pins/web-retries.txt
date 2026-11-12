@@ -1,0 +1,33 @@
+== clickAfterRedraw
+== sendKeysReadBack
+-- calls
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 0
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 1, click]
+step 1 | click | xpath: By.xpath: //a | button "Save" | SignedOutStep.act | null | null
+on step 1
+find By.xpath: //a
+element.click
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 1
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 2, click]
+step 2 | click | xpath: By.xpath: //a | button "Save" | SignedOutStep.act | null | null
+on step 2
+find By.xpath: //a
+element.click
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 2
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 3, type]
+step 3 | type | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$typedRight | null | null
+on step 3
+find By.xpath: //a
+element.sendKeys[[typed]]
+-- report
+report Info lambda$staleClick
+report Info lambda$typedRight

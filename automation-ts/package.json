@@ -1,0 +1,17 @@
+{
+  "name": "trova-automation-ts",
+  "private": true,
+  "description": "The project's automation in TypeScript: Playwright Test for web and API, WebdriverIO + Appium for the phone. Run by Trova's runner from the same suite files as the Java tests.",
+  "type": "commonjs",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test:unit": "playwright test --project=unit",
+    "suite": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1",
+    "@types/node": "^22.10.0",
+    "typescript": "~5.9.3",
+    "webdriverio": "^9.20.0"
+  }
+}

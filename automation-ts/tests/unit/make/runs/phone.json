@@ -1,0 +1,29 @@
+{
+  "runId": 703,
+  "caseId": 462,
+  "title": "Employee opens the payslips from the profile",
+  "login": "Mobile user",
+  "mode": "ui",
+  "values": {},
+  "steps": [
+    { "step": 0, "text": "Sign in on the phone as Mobile user", "result": "passed",
+      "actions": [
+        { "on": "phone", "screen": "Sign in", "screenClass": "SignInScreen", "action": "type", "element": "Account code",
+          "locator": "AppiumBy.xpath(\"//android.widget.EditText[@resource-id='account_code']\")", "login": "Mobile user", "field": "Account code" },
+        { "on": "phone", "screen": "Sign in", "screenClass": "SignInScreen", "action": "type", "element": "Password",
+          "locator": "AppiumBy.xpath(\"//android.widget.EditText[@resource-id='password']\")", "login": "Mobile user", "field": "Password" },
+        { "on": "phone", "screen": "Sign in", "screenClass": "SignInScreen", "action": "login", "login": "Mobile user" } ] },
+    { "step": 1, "text": "Open My Profile", "result": "passed",
+      "actions": [ { "on": "phone", "screen": "Home", "screenClass": "HomeAccount", "action": "tap", "element": "My Profile",
+                     "locator": "AppiumBy.xpath(\"//android.widget.Button[contains(@content-desc, 'My Profile')]\")" } ] },
+    { "step": 2, "text": "Open My payslips", "result": "passed",
+      "actions": [ { "on": "phone", "screen": "Profile", "screenClass": "ProfileScreen", "action": "tap", "element": "My payslips",
+                     "locator": "AppiumBy.xpath(\"//android.widget.Button[@content-desc='My payslips']\")" } ] },
+    { "step": 3, "text": "Open the latest payslip", "result": "passed", "expected": "The payslip of this month shows its net salary",
+      "actions": [ { "on": "phone", "screen": "Payslips", "action": "tap", "element": "Latest payslip",
+                     "locator": "AppiumBy.xpath(\"(//android.view.View[contains(@content-desc, 'Payslip')])[1]\")" } ],
+      "saw": ["Net salary"] }
+  ],
+  "setup": [],
+  "cleanup": []
+}

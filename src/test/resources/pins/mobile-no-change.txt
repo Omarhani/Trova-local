@@ -1,0 +1,8 @@
+== clickNoChange
+-- calls
+find By.id: a
+step 1 | click | 1
+perform [{actions=[{duration=100, origin=[[Fake] -> xpath: By.id: a], type=pointerMove, x=0, y=0}, {button=0, type=pointerDown}, {button=0, type=pointerUp}], id=default mouse, parameters={pointerType=mouse}, type=pointer}]
+perform [{actions=[{duration=0, type=pause}, {duration=0, origin=viewport, type=pointerMove, x=21, y=17}, {button=0, type=pointerDown}, {button=0, type=pointerUp}], id=finger, parameters={pointerType=touch}, type=pointer}]
+-- report
+report Info lambda$clickThatChangesNothing

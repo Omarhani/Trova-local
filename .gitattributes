@@ -1,0 +1,7 @@
+# shell scripts run on macOS / Linux: LF even when checked out on Windows
+*.sh text eol=lf
+# TICKET-1008: files used on the Linux server: LF always
+deploy/** text eol=lf
+platform/docker/** text eol=lf
+# Omar 2026-11-06: the pinned phone video helper (scrcpy-server) is checked by its checksum: never touched by line endings
+platform/platform-runner/src/main/resources/scrcpy/scrcpy-server-* binary

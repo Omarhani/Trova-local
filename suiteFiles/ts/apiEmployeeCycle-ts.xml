@@ -1,0 +1,77 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Availo rounds 1 and 2 (API): the TS twin of suiteFiles/api/apiEmployeeCycle.xml - cases 1+2, 3, 4, 5, 6, 7 of the Java
+     suite (all passed on Test and Stage 2026-10-13). Hybrid: the admin signs in ONCE by API, the clean-up deletes by API what this run
+     made. A case run alone makes the employee it needs by API first. -->
+<suite name="Employee cycle by API (TS)">
+    <parameter name="signedInAs" value="Admin"/>
+    <parameter name="employee_tag" value="apiCycle"/>
+    <parameter name="employee_password_from" value="Mobile user"/>
+
+    <test name="Log in programmatically">
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeSetUp.spec.ts">
+                <methods><include name="logInProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the employee can sign up from the phone by API">
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeCycle.spec.ts">
+                <methods><include name="testVerifyThatTheEmployeeCanSignUpFromThePhoneByApi"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the request reaches the admin by API">
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeCycle.spec.ts">
+                <methods><include name="testVerifyThatTheRequestReachesTheAdminByApi"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the admin can approve the request by API">
+        <parameter name="department" value="test"/>
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeCycle.spec.ts">
+                <methods><include name="testVerifyThatTheAdminCanApproveTheRequestByApi"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the employee is listed in employees by API">
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeCycle.spec.ts">
+                <methods><include name="testVerifyThatTheEmployeeIsListedInEmployeesByApi"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the new employee can log in from the phone by API">
+        <parameter name="login_wait_seconds" value="30"/>
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeCycle.spec.ts">
+                <methods><include name="testVerifyThatTheNewEmployeeCanLogInFromThePhoneByApi"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the admin can assign locations to the employee by API">
+        <parameter name="location" value="Test=Home; Stage=hany"/>
+        <parameter name="location_group" value="MainGatesGroup"/>
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeLocations.spec.ts">
+                <methods><include name="testVerifyThatTheAdminCanAssignLocationsToTheEmployeeByApi"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - delete employee by API">
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeSetUp.spec.ts">
+                <methods><include name="cleanUpEmployeesProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

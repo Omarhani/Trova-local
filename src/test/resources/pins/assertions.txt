@@ -1,0 +1,35 @@
+passed
+failed: #2 Named: expected [b] but found [a]
+passed
+passed
+failed: #5 Named true: expected [true] but found [false]
+passed
+failed: #7 Named false: expected [false] but found [true]
+passed
+failed: #9 Order total (2): expected [6] but found [5]
+failed: Group: 1 of 2 assertions failed - #10 In group: expected [2] but found [1]
+-- calls
+step 0 | assert |  |  | HandlesPinTest.lambda$everyAssertionIsReportedAndNamedAfterWhereItWasMade | true | #1 Assertion at HandlesPinTest:N: 1
+step 0 | assert |  |  | HandlesPinTest.lambda$everyAssertionIsReportedAndNamedAfterWhereItWasMade | false | #2 Named - expected b, found a
+step 0 | assert |  |  | HandlesPinTest.lambda$everyAssertionIsReportedAndNamedAfterWhereItWasMade | true | #3 Part: abc
+step 0 | assert |  |  | HandlesPinTest.lambda$everyAssertionIsReportedAndNamedAfterWhereItWasMade | true | #4 Assertion at HandlesPinTest:N: true
+step 0 | assert |  |  | HandlesPinTest.lambda$everyAssertionIsReportedAndNamedAfterWhereItWasMade | false | #5 Named true - expected true, found false
+step 0 | assert |  |  | HandlesPinTest.lambda$everyAssertionIsReportedAndNamedAfterWhereItWasMade | true | #6 Assertion at HandlesPinTest:N: false
+step 0 | assert |  |  | HandlesPinTest.lambda$everyAssertionIsReportedAndNamedAfterWhereItWasMade | false | #7 Named false - expected false, found true
+step 0 | assert |  |  | WebPinPage.checkTotal | true | #8 Order total: 5
+step 0 | assert |  |  | WebPinPage.checkTotal | false | #9 Order total (2) - expected 6, found 5
+step 0 | assert |  |  | HandlesPinTest.lambda$everyAssertionIsReportedAndNamedAfterWhereItWasMade | false | #10 In group - expected 2, found 1
+step 0 | assert |  |  | HandlesPinTest.lambda$everyAssertionIsReportedAndNamedAfterWhereItWasMade | true | #11 Also in group: true
+-- report
+report Pass <table class='table table-sm aq-assertion'><tr><th>#</th><th>Assertion</th><th>Expected</th><th>Actual</th><th>Result</th></tr><tr><td>1</td><td><bdi>Assertion at HandlesPinTest:N</bdi><br><small style='opacity:.7'>HandlesPinTest:N</small></td><td><bdi>1</bdi></td><td><bdi>1</bdi></td><td>&#9989; PASS</td></tr></table>
+report Fail <table class='table table-sm aq-assertion'><tr><th>#</th><th>Assertion</th><th>Expected</th><th>Actual</th><th>Result</th></tr><tr style='background:rgba(220,53,69,.18)'><td>2</td><td><bdi>Named</bdi><br><small style='opacity:.7'>HandlesPinTest:N</small></td><td><bdi>"b"</bdi></td><td><bdi>"a"</bdi></td><td>&#10060; FAIL</td></tr></table>
+report Pass <table class='table table-sm aq-assertion'><tr><th>#</th><th>Assertion</th><th>Expected</th><th>Actual</th><th>Result</th></tr><tr><td>3</td><td><bdi>Part</bdi><br><small style='opacity:.7'>HandlesPinTest:N</small></td><td><bdi>contains "b"</bdi></td><td><bdi>"abc"</bdi></td><td>&#9989; PASS</td></tr></table>
+report Pass <table class='table table-sm aq-assertion'><tr><th>#</th><th>Assertion</th><th>Expected</th><th>Actual</th><th>Result</th></tr><tr><td>4</td><td><bdi>Assertion at HandlesPinTest:N</bdi><br><small style='opacity:.7'>HandlesPinTest:N</small></td><td><bdi>true</bdi></td><td><bdi>true</bdi></td><td>&#9989; PASS</td></tr></table>
+report Fail <table class='table table-sm aq-assertion'><tr><th>#</th><th>Assertion</th><th>Expected</th><th>Actual</th><th>Result</th></tr><tr style='background:rgba(220,53,69,.18)'><td>5</td><td><bdi>Named true</bdi><br><small style='opacity:.7'>HandlesPinTest:N</small></td><td><bdi>true</bdi></td><td><bdi>false</bdi></td><td>&#10060; FAIL</td></tr></table>
+report Pass <table class='table table-sm aq-assertion'><tr><th>#</th><th>Assertion</th><th>Expected</th><th>Actual</th><th>Result</th></tr><tr><td>6</td><td><bdi>Assertion at HandlesPinTest:N</bdi><br><small style='opacity:.7'>HandlesPinTest:N</small></td><td><bdi>false</bdi></td><td><bdi>false</bdi></td><td>&#9989; PASS</td></tr></table>
+report Fail <table class='table table-sm aq-assertion'><tr><th>#</th><th>Assertion</th><th>Expected</th><th>Actual</th><th>Result</th></tr><tr style='background:rgba(220,53,69,.18)'><td>7</td><td><bdi>Named false</bdi><br><small style='opacity:.7'>HandlesPinTest:N</small></td><td><bdi>false</bdi></td><td><bdi>true</bdi></td><td>&#10060; FAIL</td></tr></table>
+report Pass <table class='table table-sm aq-assertion'><tr><th>#</th><th>Assertion</th><th>Expected</th><th>Actual</th><th>Result</th></tr><tr><td>8</td><td><bdi>Order total</bdi><br><small style='opacity:.7'>WebPinPage:N ← HandlesPinTest:N</small></td><td><bdi>5</bdi></td><td><bdi>5</bdi></td><td>&#9989; PASS</td></tr></table>
+report Fail <table class='table table-sm aq-assertion'><tr><th>#</th><th>Assertion</th><th>Expected</th><th>Actual</th><th>Result</th></tr><tr style='background:rgba(220,53,69,.18)'><td>9</td><td><bdi>Order total (2)</bdi><br><small style='opacity:.7'>WebPinPage:N ← HandlesPinTest:N</small></td><td><bdi>6</bdi></td><td><bdi>5</bdi></td><td>&#10060; FAIL</td></tr></table>
+report Fail <table class='table table-sm aq-assertion'><tr><th>#</th><th>Assertion</th><th>Expected</th><th>Actual</th><th>Result</th></tr><tr style='background:rgba(220,53,69,.18)'><td>10</td><td><bdi>In group</bdi><br><small style='opacity:.7'>HandlesPinTest:N</small></td><td><bdi>2</bdi></td><td><bdi>1</bdi></td><td>&#10060; FAIL</td></tr></table>
+report Pass <table class='table table-sm aq-assertion'><tr><th>#</th><th>Assertion</th><th>Expected</th><th>Actual</th><th>Result</th></tr><tr><td>11</td><td><bdi>Also in group</bdi><br><small style='opacity:.7'>HandlesPinTest:N</small></td><td><bdi>true</bdi></td><td><bdi>true</bdi></td><td>&#9989; PASS</td></tr></table>
+report Fail <b><bdi>Group</bdi></b> - 1 of 2 assertions passed<table class='table table-sm aq-assertion'><tr><th>#</th><th>Assertion</th><th>Expected</th><th>Actual</th><th>Result</th></tr><tr style='background:rgba(220,53,69,.18)'><td>10</td><td><bdi>In group</bdi><br><small style='opacity:.7'>HandlesPinTest:N</small></td><td><bdi>2</bdi></td><td><bdi>1</bdi></td><td>&#10060;</td></tr><tr><td>11</td><td><bdi>Also in group</bdi><br><small style='opacity:.7'>HandlesPinTest:N</small></td><td><bdi>true</bdi></td><td><bdi>true</bdi></td><td>&#9989;</td></tr></table>

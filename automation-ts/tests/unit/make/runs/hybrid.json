@@ -1,0 +1,25 @@
+{
+  "runId": 704,
+  "caseId": 610,
+  "title": "Admin sees a holiday made by API in the holidays list",
+  "login": "Admin",
+  "mode": "hybrid",
+  "values": { "holiday_name": "Trova holiday {run}", "holiday_date": "2026-12-24" },
+  "steps": [
+    { "step": 0, "text": "A holiday exists (made by API)", "result": "passed", "actions": [] },
+    { "step": 1, "text": "Open the Holidays page", "result": "passed",
+      "actions": [ { "on": "web", "page": "/holidays", "action": "open" } ] },
+    { "step": 2, "text": "Search for the holiday", "result": "passed", "expected": "The holiday shows with its date",
+      "actions": [ { "on": "web", "page": "/holidays", "action": "type", "element": "Search",
+                     "locator": "By.xpath(\"//input[@placeholder='Search holidays']\")", "value": "{holiday_name}" } ],
+      "saw": ["{holiday_name}", "{holiday_date}"] }
+  ],
+  "setup": [
+    { "on": "api", "side": "web", "method": "POST", "path": "/Holiday/AddHoliday", "purpose": "setup",
+      "body": { "Name": "{holiday_name}", "Date": "{holiday_date}" }, "status": 200, "keep": { "holiday_id": "Data" } }
+  ],
+  "cleanup": [
+    { "on": "api", "side": "web", "method": "POST", "path": "/Holiday/DeleteHoliday", "purpose": "cleanup",
+      "body": { "ID": "{holiday_id}" }, "status": 200 }
+  ]
+}

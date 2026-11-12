@@ -1,0 +1,21 @@
+{
+  "runId": 705,
+  "caseId": 720,
+  "title": "Admin adds a department by API",
+  "login": "Admin",
+  "mode": "hybrid",
+  "values": { "department_name": "Trova dept {run}" },
+  "steps": [
+    { "step": 1, "text": "Add a department", "result": "passed", "expected": "The department is saved",
+      "actions": [ { "on": "api", "side": "web", "method": "POST", "path": "/Department/AddDepartment",
+                     "body": { "Name": "{department_name}" }, "status": 200, "says": ["Saved"], "keep": { "department_id": "Data" } } ] },
+    { "step": 2, "text": "Read the departments", "result": "passed", "expected": "The new department is in the list",
+      "actions": [ { "on": "api", "side": "web", "method": "POST", "path": "/Department/GetAllDepartments",
+                     "body": {}, "status": 200, "says": ["{department_name}"] } ] }
+  ],
+  "setup": [],
+  "cleanup": [
+    { "on": "api", "side": "web", "method": "POST", "path": "/Department/DeleteDepartment", "purpose": "cleanup",
+      "body": { "ID": "{department_id}" }, "status": 200 }
+  ]
+}

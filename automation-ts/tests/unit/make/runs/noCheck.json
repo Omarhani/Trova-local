@@ -1,0 +1,17 @@
+{
+  "runId": 706,
+  "caseId": 777,
+  "title": "Admin opens the leave types and clicks around",
+  "login": "Admin",
+  "mode": "ui",
+  "values": {},
+  "steps": [
+    { "step": 1, "text": "Open the Leave types page", "result": "passed",
+      "actions": [ { "on": "web", "page": "/leave-types", "action": "open" } ] },
+    { "step": 2, "text": "Click New leave type", "result": "passed",
+      "actions": [ { "on": "web", "page": "/leave-types", "action": "click", "element": "New leave type",
+                     "locator": "By.xpath(\"//button[normalize-space()='New leave type']\")" } ] }
+  ],
+  "setup": [],
+  "cleanup": []
+}

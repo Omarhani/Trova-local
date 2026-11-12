@@ -1,0 +1,199 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Plans">
+    <parameter name="browser" value="${browserType}"/>
+    <parameter name="shift_plan_country" value="مصر"/>
+    <parameter name="shift_repeat" value="daily"/>
+    <parameter name="shift_start_date" value="tomorrow"/>
+    <parameter name="shift_start_time" value="10:00 am"/>
+    <parameter name="shift_end_time" value="05:00 pm"/>
+    <parameter name="shift_max_checkout_time" value="08:00 pm"/>
+
+    <test name="Log in programmatically">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="tests.web.plans.PlansTests">
+                <methods><include name="logInProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 290 - Verify that G1 Verify that adding a new plan saves it">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <parameter name="shift_plan_name" value="Trova Plan {run:290}"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="tests.web.plans.PlansTests">
+                <methods><include name="testVerifyThatG1VerifyThatAddingANewPlanSavesIt"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - Delete the plan record (after test 1)">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <classes>
+            <class name="tests.api.plans.PlansApiTests">
+                <methods><include name="cleanUpPlansProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 291 - Verify that G2 Verify that editing a plan's days off saves it">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <parameter name="shift_plan_name" value="Trova Plan {run:291}"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="tests.web.plans.PlansTests">
+                <methods><include name="testVerifyThatG2VerifyThatEditingAPlansDaysOffSavesIt"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - Delete the record (after test 2)">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <classes>
+            <class name="tests.api.plans.PlansApiTests">
+                <methods><include name="cleanUpPlansProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 292 - Verify that G3 Verify that adding a regular shift saves its times">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <parameter name="shift_plan_name" value="Trova Plan {run:292}"/>
+        <parameter name="shift_title" value="Trova Shift {run:292}"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="tests.web.plans.PlansTests">
+                <methods><include name="testVerifyThatG3VerifyThatAddingARegularShiftSavesItsTimes"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - Delete the regular shift record (after test 3)">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <classes>
+            <class name="tests.api.plans.PlansApiTests">
+                <methods><include name="cleanUpPlansProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 297 - Verify that G8 Verify that removing the employee from a shift saves it">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <parameter name="shift_plan_name" value="Trova Plan {run:297}"/>
+        <parameter name="shift_title" value="Trova Shift {run:297}"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="tests.web.plans.PlansTests">
+                <methods><include name="testVerifyThatG8VerifyThatRemovingTheEmployeeFromAShiftSavesIt"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - Delete the record (after test 4)">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <classes>
+            <class name="tests.api.plans.PlansApiTests">
+                <methods><include name="cleanUpPlansProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 298 - Verify that G9 Verify that a shift with no employees is deleted">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <parameter name="shift_plan_name" value="Trova Plan {run:298}"/>
+        <parameter name="shift_title" value="Trova Shift {run:298}"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="tests.web.plans.PlansTests">
+                <methods><include name="testVerifyThatG9VerifyThatAShiftWithNoEmployeesIsDeleted"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - Delete the record (after test 5)">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <classes>
+            <class name="tests.api.plans.PlansApiTests">
+                <methods><include name="cleanUpPlansProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 299 - Verify that G10 Verify that a plan with no shifts is deleted">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <parameter name="shift_plan_name" value="Trova Plan {run:299}"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="tests.web.plans.PlansTests">
+                <methods><include name="testVerifyThatG10VerifyThatAPlanWithNoShiftsIsDeleted"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - Delete the record (after test 6)">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <classes>
+            <class name="tests.api.plans.PlansApiTests">
+                <methods><include name="cleanUpPlansProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 294 - Verify that G5 Verify that the plan filter shows only that plan's shifts">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <parameter name="shift_plan_name" value="Trova Plan {run:294}"/>
+        <parameter name="shift_title" value="Trova Shift {run:294}"/>
+        <parameter name="shift_max_checkout" value="6 pm"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="tests.web.plans.PlansTests">
+                <methods><include name="testVerifyThatG5VerifyThatThePlanFilterShowsOnlyThatPlansShifts"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 293 - Verify that G4 Verify that a new shift starts tomorrow by default">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="tests.web.plans.PlansTests">
+                <methods><include name="testVerifyThatG4VerifyThatANewShiftStartsTomorrowByDefault"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 295 - Verify that G6 Verify that a plan with shifts cannot be deleted">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <parameter name="shift_plan_name" value="Trova Plan {run:295}"/>
+        <parameter name="shift_title" value="Trova Shift {run:295}"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="tests.web.plans.PlansTests">
+                <methods><include name="testVerifyThatG6VerifyThatAPlanWithShiftsCannotBeDeleted"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 296 - Verify that G7 Verify that a shift with an employee cannot be deleted">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <parameter name="shift_plan_name" value="Trova Plan {run:296}"/>
+        <parameter name="shift_title" value="Trova Shift {run:296}"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="tests.web.plans.PlansTests">
+                <methods><include name="testVerifyThatG7VerifyThatAShiftWithAnEmployeeCannotBeDeleted"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - Delete the records of tests 7 to 10">
+        <parameter name="signedInAs" value="Account Manager - Plan"/>
+        <classes>
+            <class name="tests.api.plans.PlansApiTests">
+                <methods><include name="cleanUpPlansProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

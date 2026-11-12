@@ -1,0 +1,46 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Self-healing proof C (Omar 2026-11-11): two failed checks. A toast our read misses (our box name is wrong) must end FAILED with first aid naming OUR code and a treatment waiting; the TRAP - the page shows a plan name the server does not have - must end FAILED and NEVER be healed. Work plans page; case 3 saves one plan, deleted by the API clean-up. -->
+<suite name="Self-healing proof C (TS)">
+    <parameter name="browser" value="${browserType}"/>
+    <parameter name="signedInAs" value="Admin"/>
+    <parameter name="shift_plan_country" value="مصر"/>
+
+    <test name="Log in programmatically">
+        <classes>
+            <class name="ts:tests/api/signIn/logIn.spec.ts">
+                <methods><include name="logInProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- designed end: FAILED check (the toast was shown, our read missed it), first aid cause OUR code, treatment WAITING -->
+    <test name="Case - A toast our read misses ends Failed with our code to fix">
+        <parameter name="shift_plan_name" value="Trova Heal Proof Plan {run:3}"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/healProof/healProofChecks.spec.ts">
+                <methods><include name="healToastOurReadMisses"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- designed end: FAILED (the app shows a wrong value), NEVER healed - no treatment, no AI pass -->
+    <test name="Case - Trap - the app shows a wrong plan name ends Failed, never healed">
+        <parameter name="trap" value="true"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/healProof/healProofChecks.spec.ts">
+                <methods><include name="healTrapAppShowsWrongValue"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - delete the proof plan by API">
+        <parameter name="plan_name" value="Trova Heal Proof Plan {run:3}"/>
+        <classes>
+            <class name="ts:tests/api/workPlans/workPlanCleanUp.spec.ts">
+                <methods><include name="cleanUpWorkPlansProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

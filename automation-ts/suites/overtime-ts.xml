@@ -1,0 +1,24 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Overtime set-up by API (TS)">
+    <parameter name="employee_login" value="Employee over Time"/>
+    <parameter name="employee_login_2" value="Employee over Time 2"/>
+    <parameter name="manager_login" value="Account manager over Time"/>
+    <parameter name="overtime_hours" value="1"/>
+    <parameter name="overtime_reason" value="Trova overtime check"/>
+
+    <test name="Set-up programmatically - an overtime request for today">
+        <classes>
+            <class name="ts:tests/api/overtimeManagement/overtimeManagement.spec.ts">
+                <methods><include name="setUpAnEmployeeWithAPendingOvertimeRequestForToday"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean-up programmatically">
+        <classes>
+            <class name="ts:tests/api/overtimeManagement/overtimeManagement.spec.ts">
+                <methods><include name="cleanUpProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

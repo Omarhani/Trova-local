@@ -1,0 +1,54 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Java web/webCheckInAndOut.xml (and the report part of web/webReportExport.xml): the admin adds a check in and out for the run's own employee on the web, then the attendance report shows them. Hybrid: one sign-in by quick calls, the employee made and deleted by API. -->
+<suite name="Check in and out on the web (TS)">
+    <parameter name="browser" value="${browserType}"/>
+    <parameter name="signedInAs" value="Admin"/>
+    <parameter name="employee_password_from" value="Mobile user"/>
+    <parameter name="employee_tag" value="webCheck"/>
+
+    <test name="Log in programmatically">
+        <classes>
+            <class name="ts:tests/api/signIn/logIn.spec.ts">
+                <methods><include name="logInProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Set-up - Create employee by API">
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeSetUp.spec.ts">
+                <methods><include name="approvedEmployeeProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the admin can add a check in and a check out for the employee from the web">
+        <parameter name="check_in" value="9:00 am"/>
+        <parameter name="check_out" value="6:00 pm"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/attendance/webAttendance.spec.ts">
+                <methods><include name="testVerifyThatTheAdminCanAddACheckInAndOutForTheEmployeeFromTheWeb"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the attendance report shows the check in and out added on the web">
+        <parameter name="attendance_time" value="09:00"/>
+        <parameter name="cancellation_time" value="18:00"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/attendance/webAttendance.spec.ts">
+                <methods><include name="testVerifyThatTheReportShowsTheCheckInAndOutAddedOnTheWeb"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - delete employee by API">
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeSetUp.spec.ts">
+                <methods><include name="cleanUpEmployeesProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

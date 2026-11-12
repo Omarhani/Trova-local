@@ -1,0 +1,30 @@
+{
+  "runId": 702,
+  "caseId": 340,
+  "title": "Admin creates an invoice with a discount",
+  "login": "Admin",
+  "mode": "ui",
+  "values": { "invoice_notes": "AUTO-INV {run}", "invoice_discount": "10" },
+  "steps": [
+    { "step": 1, "text": "Open the Invoices page", "result": "passed",
+      "actions": [ { "on": "web", "page": "/invoices", "pageClass": "InvoicesPage", "action": "open" } ] },
+    { "step": 2, "text": "Click New invoice", "result": "passed",
+      "actions": [ { "on": "web", "page": "/invoices", "pageClass": "InvoicesPage", "action": "click", "element": "New invoice",
+                     "locator": "By.xpath(\"//button[normalize-space()='فاتورة جديدة']\")" } ] },
+    { "step": 3, "text": "Write the notes", "result": "passed",
+      "actions": [ { "on": "web", "page": "/invoices", "pageClass": "InvoicesPage", "action": "type", "element": "Note text",
+                     "locator": "By.id(\"iNotes\")", "value": "{invoice_notes}" } ] },
+    { "step": 4, "text": "Type the discount", "result": "passed",
+      "actions": [ { "on": "web", "page": "/invoices", "pageClass": "InvoicesPage", "action": "type", "element": "Discount",
+                     "locator": "By.xpath(\"//*[@role='dialog'][@aria-label='فاتورة جديدة']//input[@formcontrolname='discount']\")", "value": "{invoice_discount}" } ] },
+    { "step": 5, "text": "Change the discount again", "result": "passed",
+      "actions": [ { "on": "web", "page": "/invoices", "pageClass": "InvoicesPage", "action": "type", "element": "Discount %",
+                     "locator": "By.xpath(\"//*[@role='dialog'][@aria-label='فاتورة جديدة']//input[@formcontrolname='discount']\")", "value": "{invoice_discount}" } ] },
+    { "step": 6, "text": "Save the invoice", "result": "passed", "expected": "The invoice is saved and its amount shows",
+      "actions": [ { "on": "web", "page": "/invoices", "pageClass": "InvoicesPage", "action": "click", "element": "Save invoice",
+                     "locator": "By.xpath(\"//*[@role='dialog'][@aria-label='فاتورة جديدة']//button[@type='submit'][normalize-space()='حفظ الفاتورة']\")" } ],
+      "saw": ["بمبلغ"] }
+  ],
+  "setup": [],
+  "cleanup": []
+}

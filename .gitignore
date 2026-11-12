@@ -1,0 +1,23 @@
+# Trova-local: the test project of the local Trova account - files made by runs, never committed
+target/
+report/
+# automation-ts reporter source is code, not a report output
+!automation-ts/src/report/
+/live/
+suiteFiles/.platform/
+node_modules/
+data/credentials.json
+data/attachments/
+# test data lives in Trova only - the runner writes this file for each run and removes it after
+/data/testData.json
+data/testDate.txt
+data/workDate.txt
+data/workDate-*.txt
+bugcycle/runs/
+testingActivity/stories/*/attachments/
+*.png
+*.avi
+.idea/
+*.iml
+.vscode/
+.DS_Store

@@ -1,0 +1,418 @@
+== click
+== submit
+== clickWithActions
+== smartClick
+== doubleClick
+== contextClick
+== clickAndHold
+== escapeButton
+== sendKeysWithEnter
+== sendKeysWithEnterAndEscape
+== moveToElement
+== dragAndDrop
+== release
+== releaseNow
+== scrollToElementInModal
+== pressKey
+== clear
+== sendKeys
+== sendKeysWithDelay
+== selectByValue
+== selectByIndex
+threw NoSuchElementException
+== selectByVisibleText
+== insertTimeMovement
+== acceptAlert
+== dismissAlert
+== sendKeysAlert
+== highlightBy
+== highlightElement
+== openPage
+== clickAccept
+== clickReject
+== hideElement
+== scrollIntoView
+== scrollIntoElement
+== invisibilityOf
+== setStep
+== explicitWait
+== waitForToasterToAppearAndDisappear
+== waitForToaster
+== getText
+-> the text
+== getTextUsingHorizontalScroll
+-> the text
+== getTextFromDOM
+-> button "Save"
+== getTextViaJS
+-> button "Save"
+== isSelected
+-> false
+== isDisplayed
+-> true
+== isEnabled
+-> true
+== getToasterContent
+-> the text
+== getTextAlert
+-> alert text
+== webElementFound
+-> true
+== webElementsFound
+-> 1
+-- calls
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 0
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 1, click]
+step 1 | click | xpath: By.xpath: //a | button "Save" | SignedOutStep.act | null | null
+on step 1
+find By.xpath: //a
+element.click
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 1
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 2, submit]
+step 2 | submit | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 2
+find By.xpath: //a
+element.submit
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 2
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 3, click]
+step 3 | click | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 3
+find By.xpath: //a
+perform [{actions=[{duration=100, origin=[[Fake] -> xpath: By.xpath: //a], type=pointerMove, x=0, y=0}, {button=0, type=pointerDown}, {button=0, type=pointerUp}], id=default mouse, parameters={pointerType=mouse}, type=pointer}]
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+before step 3
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 4, click]
+step 4 | click | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 4
+perform [{actions=[{duration=100, origin=[[Fake] -> xpath: By.xpath: //a], type=pointerMove, x=0, y=0}, {duration=200, type=pause}, {button=0, type=pointerDown}, {button=0, type=pointerUp}], id=default mouse, parameters={pointerType=mouse}, type=pointer}]
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 4
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 5, double click]
+step 5 | double click | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 5
+find By.xpath: //a
+perform [{actions=[{duration=100, origin=[[Fake] -> xpath: By.xpath: //a], type=pointerMove, x=0, y=0}, {button=0, type=pointerDown}, {button=0, type=pointerUp}, {button=0, type=pointerDown}, {button=0, type=pointerUp}], id=default mouse, parameters={pointerType=mouse}, type=pointer}]
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 5
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 6, right click]
+step 6 | right click | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 6
+find By.xpath: //a
+perform [{actions=[{duration=100, origin=[[Fake] -> xpath: By.xpath: //a], type=pointerMove, x=0, y=0}, {button=2, type=pointerDown}, {button=2, type=pointerUp}], id=default mouse, parameters={pointerType=mouse}, type=pointer}]
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 6
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 7, hold]
+step 7 | hold | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 7
+find By.xpath: //a
+perform [{actions=[{duration=100, origin=[[Fake] -> xpath: By.xpath: //a], type=pointerMove, x=0, y=0}, {button=0, type=pointerDown}], id=default mouse, parameters={pointerType=mouse}, type=pointer}]
+perform [{actions=[{type=keyDown, value=}, {type=keyUp, value=}], id=default keyboard, type=key}]
+find By.xpath: //a
+before step 7
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 8, type]
+step 8 | type | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 8
+find By.xpath: //a
+perform [{actions=[{duration=0, type=pause}, {duration=0, type=pause}, {duration=0, type=pause}, {type=keyDown, value=t}, {type=keyUp, value=t}], id=default keyboard, type=key}, {actions=[{duration=100, origin=[[Fake] -> xpath: By.xpath: //a], type=pointerMove, x=0, y=0}, {button=0, type=pointerDown}, {button=0, type=pointerUp}, {duration=0, type=pause}, {duration=0, type=pause}], id=default mouse, parameters={pointerType=mouse}, type=pointer}]
+find By.xpath: //a
+perform [{actions=[{duration=0, type=pause}, {duration=0, type=pause}, {duration=0, type=pause}, {type=keyDown, value=}, {type=keyUp, value=}], id=default keyboard, type=key}, {actions=[{duration=100, origin=[[Fake] -> xpath: By.xpath: //a], type=pointerMove, x=0, y=0}, {button=0, type=pointerDown}, {button=0, type=pointerUp}, {duration=0, type=pause}, {duration=0, type=pause}], id=default mouse, parameters={pointerType=mouse}, type=pointer}]
+find By.xpath: //a
+before step 8
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 9, type]
+step 9 | type | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 9
+find By.xpath: //a
+perform [{actions=[{duration=0, type=pause}, {duration=0, type=pause}, {duration=0, type=pause}, {type=keyDown, value=t}, {type=keyUp, value=t}], id=default keyboard, type=key}, {actions=[{duration=100, origin=[[Fake] -> xpath: By.xpath: //a], type=pointerMove, x=0, y=0}, {button=0, type=pointerDown}, {button=0, type=pointerUp}, {duration=0, type=pause}, {duration=0, type=pause}], id=default mouse, parameters={pointerType=mouse}, type=pointer}]
+find By.xpath: //a
+perform [{actions=[{duration=0, type=pause}, {duration=0, type=pause}, {duration=0, type=pause}, {type=keyDown, value=}, {type=keyUp, value=}], id=default keyboard, type=key}, {actions=[{duration=100, origin=[[Fake] -> xpath: By.xpath: //a], type=pointerMove, x=0, y=0}, {button=0, type=pointerDown}, {button=0, type=pointerUp}, {duration=0, type=pause}, {duration=0, type=pause}], id=default mouse, parameters={pointerType=mouse}, type=pointer}]
+find By.xpath: //a
+perform [{actions=[{duration=0, type=pause}, {duration=0, type=pause}, {duration=0, type=pause}, {type=keyDown, value=}, {type=keyUp, value=}], id=default keyboard, type=key}, {actions=[{duration=100, origin=[[Fake] -> xpath: By.xpath: //a], type=pointerMove, x=0, y=0}, {button=0, type=pointerDown}, {button=0, type=pointerUp}, {duration=0, type=pause}, {duration=0, type=pause}], id=default mouse, parameters={pointerType=mouse}, type=pointer}]
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 9
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 10, hover]
+step 10 | hover | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 10
+find By.xpath: //a
+perform [{actions=[{duration=100, origin=[[Fake] -> xpath: By.xpath: //a], type=pointerMove, x=0, y=0}], id=default mouse, parameters={pointerType=mouse}, type=pointer}]
+find By.xpath: //a
+find By.id: b
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 10
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 11, drag]
+step 11 | drag | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 11
+find By.id: b
+script#2039388748 [[[Fake] -> xpath: By.id: b]]
+find By.id: b
+before step 11
+script#-180235449 [[[Fake] -> xpath: By.id: b], 12, drag]
+step 12 | drag | xpath: By.id: b | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 12
+find By.xpath: //a
+find By.id: b
+perform [{actions=[{duration=100, origin=[[Fake] -> xpath: By.xpath: //a], type=pointerMove, x=0, y=0}, {button=0, type=pointerDown}, {duration=100, origin=[[Fake] -> xpath: By.id: b], type=pointerMove, x=0, y=0}, {button=0, type=pointerUp}], id=default mouse, parameters={pointerType=mouse}, type=pointer}]
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 12
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 13, release]
+step 13 | release | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 13
+perform [{actions=[{button=0, type=pointerUp}], id=default mouse, parameters={pointerType=mouse}, type=pointer}]
+find By.xpath: //a
+script#1754316694 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+element.sendKeys[[k]]
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 13
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 14, clear]
+step 14 | clear | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 14
+find By.xpath: //a
+element.clear
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 14
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 15, type]
+step 15 | type | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 15
+find By.xpath: //a
+element.sendKeys[[typed]]
+element.clear
+element.sendKeys[[typed]]
+find By.xpath: //a
+before step 15
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 16, type]
+step 16 | type | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 16
+element.clear
+perform [{actions=[{duration=0, type=pause}, {duration=0, type=pause}, {duration=0, type=pause}, {duration=0, type=pause}, {type=keyDown, value=a}, {type=keyUp, value=a}, {duration=0, type=pause}, {type=keyDown, value=b}, {type=keyUp, value=b}], id=default keyboard, type=key}, {actions=[{duration=100, origin=[[Fake] -> xpath: By.xpath: //a], type=pointerMove, x=0, y=0}, {button=0, type=pointerDown}, {button=0, type=pointerUp}, {duration=100, type=pause}, {duration=0, type=pause}, {duration=0, type=pause}, {duration=100, type=pause}, {duration=0, type=pause}, {duration=0, type=pause}], id=default mouse, parameters={pointerType=mouse}, type=pointer}]
+find By.xpath: //a
+before step 16
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 17, select]
+step 17 | select | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 17
+find By.xpath: //a
+element.click
+find By.xpath: //a
+before step 17
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 18, select]
+step 18 | select | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 18
+find By.xpath: //a
+before step 18
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 19, select]
+step 19 | select | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 19
+find By.xpath: //a
+element.getCssValue[visibility]
+element.getCssValue[display]
+element.getCssValue[opacity]
+element.getCssValue[visibility]
+element.getCssValue[display]
+element.getCssValue[opacity]
+element.click
+find By.xpath: //a
+before step 19
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 20, type]
+step 20 | type | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 20
+find By.xpath: //a
+script#-1325823822 [[[Fake] -> xpath: By.xpath: //a], 10:00]
+alert.accept
+alert.dismiss
+alert.sendKeys[a]
+find By.xpath: //a
+before step 20
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 21, custom]
+step 21 | custom | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 21
+find By.xpath: //a
+before step 21
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 22, custom2]
+step 22 | custom2 | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 22
+driver.get[http://x]
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 22
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 23, check]
+step 23 | check | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 23
+find By.xpath: //a
+find By.className: swal2-title
+script#2039388748 [[[Fake] -> xpath: By.className: swal2-title]]
+find By.className: swal2-title
+script#2039388748 [[[Fake] -> xpath: By.className: swal2-title]]
+find By.className: swal2-title
+before step 23
+script#-180235449 [[[Fake] -> xpath: By.className: swal2-title], 24, check]
+step 24 | check | xpath: By.className: swal2-title | button "Save" | WebPinPage.step | null | null
+on step 24
+find By.className: swal2-title
+find By.xpath: //button[@class='swal2-confirm swal2-styled']
+script#2039388748 [[[Fake] -> xpath: By.xpath: //button[@class='swal2-confirm swal2-styled']]]
+find By.xpath: //button[@class='swal2-confirm swal2-styled']
+before step 24
+script#-180235449 [[[Fake] -> xpath: By.xpath: //button[@class='swal2-confirm swal2-styled']], 25, click]
+step 25 | click | xpath: By.xpath: //button[@class='swal2-confirm swal2-styled'] | button "Save" | SignedOutStep.act | null | null
+on step 25
+find By.xpath: //button[@class='swal2-confirm swal2-styled']
+element.click
+find By.className: swal2-title
+script#2039388748 [[[Fake] -> xpath: By.className: swal2-title]]
+find By.className: swal2-title
+script#2039388748 [[[Fake] -> xpath: By.className: swal2-title]]
+find By.className: swal2-title
+before step 25
+script#-180235449 [[[Fake] -> xpath: By.className: swal2-title], 26, check]
+step 26 | check | xpath: By.className: swal2-title | button "Save" | WebPinPage.step | null | null
+on step 26
+find By.className: swal2-title
+find By.xpath: //button[@class='swal2-cancel swal2-styled']
+script#2039388748 [[[Fake] -> xpath: By.xpath: //button[@class='swal2-cancel swal2-styled']]]
+find By.xpath: //button[@class='swal2-cancel swal2-styled']
+before step 26
+script#-180235449 [[[Fake] -> xpath: By.xpath: //button[@class='swal2-cancel swal2-styled']], 27, click]
+step 27 | click | xpath: By.xpath: //button[@class='swal2-cancel swal2-styled'] | button "Save" | SignedOutStep.act | null | null
+on step 27
+find By.xpath: //button[@class='swal2-cancel swal2-styled']
+element.click
+find By.xpath: //a
+script#-1660996583 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+script#241334114 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.id: gone
+find By.xpath: //a
+find By.id: toast-container
+find By.xpath: //div[@role='alert']
+before step 27
+script#-180235449 [[[Fake] -> xpath: By.xpath: //div[@role='alert']], 28, toast]
+step 28 | toast | xpath: By.xpath: //div[@role='alert'] | button "Save" | WebPinPage.step | null | null
+on step 28
+find By.id: toast-container
+find By.xpath: //div[@role='alert']
+before step 28
+script#-180235449 [[[Fake] -> xpath: By.xpath: //div[@role='alert']], 29, toast]
+step 29 | toast | xpath: By.xpath: //div[@role='alert'] | button "Save" | WebPinPage.lambda$everyAct | null | null
+on step 29
+find By.id: toast-container
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 29
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 30, check]
+step 30 | check | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyRead | null | null
+on step 30
+find By.xpath: //a
+script#241334114 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 30
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 31, check]
+step 31 | check | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyRead | null | null
+on step 31
+find By.xpath: //a
+script#1023386969 [[[Fake] -> xpath: By.xpath: //a]]
+before step 31
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 32, check]
+step 32 | check | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyRead | null | null
+on step 32
+find By.xpath: //a
+script#-136864894 [[[Fake] -> xpath: By.xpath: //a]]
+before step 32
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 33, check]
+step 33 | check | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyRead | null | null
+on step 33
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 33
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 34, check]
+step 34 | check | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyRead | null | null
+on step 34
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 34
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 35, check]
+step 35 | check | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyRead | null | null
+on step 35
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+script#2039388748 [[[Fake] -> xpath: By.xpath: //a]]
+find By.xpath: //a
+before step 35
+script#-180235449 [[[Fake] -> xpath: By.xpath: //a], 36, check]
+step 36 | check | xpath: By.xpath: //a | button "Save" | WebPinPage.lambda$everyRead | null | null
+on step 36
+find By.xpath: //a
+find By.xpath: //div[@role='alert']
+script#2039388748 [[[Fake] -> xpath: By.xpath: //div[@role='alert']]]
+find By.xpath: //div[@role='alert']
+before step 36
+script#-180235449 [[[Fake] -> xpath: By.xpath: //div[@role='alert']], 37, check]
+step 37 | check | xpath: By.xpath: //div[@role='alert'] | button "Save" | WebPinPage.lambda$everyRead | null | null
+on step 37
+find By.xpath: //div[@role='alert']
+alert.getText
+find By.xpath: //a
+findAll By.xpath: //a
+-- report
+report Info lambda$everyAct
+report Info lambda$everyAct
+report Info lambda$everyAct
+report Info lambda$everyAct
+report Info lambda$everyAct
+report Info lambda$everyAct
+report Info lambda$everyAct
+report Info lambda$everyAct
+report Info lambda$everyAct
+report Info lambda$everyAct
+report Info lambda$everyAct
+report Info lambda$everyAct
+report Info lambda$everyAct
+report Info lambda$everyAct
+report Info openPage
+report Info waitForConfirmationDialog
+report Info clickAccept
+report Info waitForConfirmationDialog
+report Info clickReject
+report Info step
+report Info lambda$everyRead
+report Info lambda$everyRead
+report Info lambda$everyRead
+report Info lambda$everyRead
+report Info lambda$everyRead
+report Info lambda$everyRead
+report Info getToasterContent

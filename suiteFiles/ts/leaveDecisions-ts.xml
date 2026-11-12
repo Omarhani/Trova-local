@@ -1,0 +1,65 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Java hybrid/mobFullCycleForLeaves.xml (AdminActions): the admin accepts, rejects and deletes on the web leave requests the run's employee (made by API) sent - each case's request sent by the employee's API (set-up). Hybrid: one admin sign-in by quick calls, the employee deleted by API. -->
+<suite name="Leave requests - the admin decides (TS)">
+    <parameter name="browser" value="${browserType}"/>
+    <parameter name="signedInAs" value="Admin"/>
+    <parameter name="server" value="${serverType}"/>
+    <parameter name="employee_tag" value="leaveDecide"/>
+    <parameter name="employee_password_from" value="Mobile user"/>
+    <parameter name="leave_type" value="Sick leave"/>
+    <parameter name="leave_weekend" value="Fri,Sat"/>
+
+    <test name="Log in programmatically">
+        <classes>
+            <class name="ts:tests/api/signIn/logIn.spec.ts">
+                <methods><include name="logInProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Set-up - Create employee by API">
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeSetUp.spec.ts">
+                <methods><include name="approvedEmployeeProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the admin can accept a leave request sent from the app">
+        <parameter name="leave_note" value="Trova leave accept {run}"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/leaveRequests/leaveDecisions.spec.ts">
+                <methods><include name="testVerifyThatTheAdminCanAcceptALeaveRequestSentFromTheApp"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the admin can reject a leave request sent from the app">
+        <parameter name="leave_note" value="Trova leave reject {run}"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/leaveRequests/leaveDecisions.spec.ts">
+                <methods><include name="testVerifyThatTheAdminCanRejectALeaveRequestSentFromTheApp"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the admin can delete a leave request sent from the app">
+        <parameter name="leave_note" value="Trova leave delete on the web {run}"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/leaveRequests/leaveDecisions.spec.ts">
+                <methods><include name="testVerifyThatTheAdminCanDeleteALeaveRequestSentFromTheApp"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - delete employee by API">
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeSetUp.spec.ts">
+                <methods><include name="cleanUpEmployeesProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

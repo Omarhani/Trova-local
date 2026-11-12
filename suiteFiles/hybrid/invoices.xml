@@ -1,0 +1,38 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Invoices">
+    <parameter name="browser" value="${browserType}"/>
+
+    <test name="Log in programmatically">
+        <parameter name="signedInAs" value="Admin"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="tests.web.invoices.InvoicesTests">
+                <methods><include name="logInProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Admin creates an invoice">
+        <parameter name="signedInAs" value="Admin"/>
+        <parameter name="invoice_customer" value="WALK-IN"/>
+        <parameter name="invoice_item" value="auto"/>
+        <parameter name="invoice_quantity" value="2"/>
+        <parameter name="invoice_unit_price" value="75"/>
+        <parameter name="invoice_notes" value="auto"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="tests.web.invoices.InvoicesTests">
+                <methods><include name="testAdminCreatesAnInvoice"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up programmatically">
+        <parameter name="signedInAs" value="Admin"/>
+        <classes>
+            <class name="tests.api.invoices.InvoicesApiTests">
+                <methods><include name="cleanUpInvoicesProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

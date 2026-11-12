@@ -1,0 +1,34 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Self-healing proof B (Omar 2026-11-11): the network cut must end NOT CHECKED (Blocked - the environment, never healed); the app answering an error must end FAILED (a real app bug, never healed). Work plans page only, nothing saved; the cut call is given back after each case. -->
+<suite name="Self-healing proof B (TS)">
+    <parameter name="browser" value="${browserType}"/>
+    <parameter name="signedInAs" value="Admin"/>
+
+    <test name="Log in programmatically">
+        <classes>
+            <class name="ts:tests/api/signIn/logIn.spec.ts">
+                <methods><include name="logInProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- designed end: NOT CHECKED (Blocked) -->
+    <test name="Case - The network cut ends Blocked">
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/healProof/healProof.spec.ts">
+                <methods><include name="healNetworkCut"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- designed end: FAILED, never healed -->
+    <test name="Case - The app answering an error ends Failed">
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/healProof/healProof.spec.ts">
+                <methods><include name="healAppAnswersWrong"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

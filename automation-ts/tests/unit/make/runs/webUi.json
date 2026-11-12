@@ -1,0 +1,34 @@
+{
+  "runId": 701,
+  "caseId": 501,
+  "title": "Admin adds a leave type",
+  "login": "Admin",
+  "mode": "ui",
+  "values": { "leave_type_name": "Trova leave {run}", "leave_type_days": "5" },
+  "steps": [
+    { "step": 0, "text": "Sign in as Admin", "result": "passed",
+      "actions": [ { "on": "web", "page": "/login", "action": "login", "login": "Admin" } ] },
+    { "step": 1, "text": "Open the Leave types page", "result": "passed",
+      "actions": [ { "on": "web", "page": "/leave-types", "action": "open" } ] },
+    { "step": 2, "text": "Click New leave type", "result": "passed",
+      "actions": [ { "on": "web", "page": "/leave-types", "action": "click", "element": "New leave type",
+                     "locator": "By.xpath(\"//button[normalize-space()='New leave type']\")" } ] },
+    { "step": 3, "text": "Type the name and the days", "result": "passed",
+      "actions": [
+        { "on": "web", "page": "/leave-types", "action": "type", "element": "Name",
+          "locator": "By.xpath(\"//input[@formcontrolname='name']\")", "value": "{leave_type_name}" },
+        { "on": "web", "page": "/leave-types", "action": "type", "element": "Days",
+          "locator": "By.xpath(\"//input[@formcontrolname='days']\")", "value": "{leave_type_days}" } ] },
+    { "step": 4, "text": "Click Save", "result": "passed", "expected": "The new leave type shows in the list",
+      "actions": [ { "on": "web", "page": "/leave-types", "action": "click", "element": "Save",
+                     "locator": "By.xpath(\"//button[@type='submit'][normalize-space()='Save']\")" } ],
+      "saw": ["{leave_type_name}"] }
+  ],
+  "setup": [],
+  "cleanup": [
+    { "on": "web", "page": "/leave-types", "action": "click", "element": "Delete",
+      "locator": "By.xpath(\"//tr[td[normalize-space()='{row}']]//button[@title='Delete']\")", "value": "{leave_type_name}" },
+    { "on": "web", "page": "/leave-types", "action": "click", "element": "Yes",
+      "locator": "By.xpath(\"//button[normalize-space()='Yes']\")" }
+  ]
+}

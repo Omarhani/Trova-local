@@ -1,0 +1,18 @@
+package tests.web.home;
+
+import base.BaseTests;
+import org.testng.annotations.Test;
+
+import static utils.MethodHandlesWeb.myAssertFalse;
+
+/**
+ * Web smoke check - works for any app: the env's WEB_URL (data file ENVIRONMENTS) opens and has a title.
+ * BaseTests already opened WEB_URL before this test. Put your app's web tests beside it (tests/web/login, tests/web/orders ...).
+ */
+public class HomeTests extends BaseTests {
+
+    @Test(groups = "Web")
+    public void verifyThatTheHomePageOpens() {
+        myAssertFalse("Home page · title is empty", driver.getTitle() == null || driver.getTitle().isBlank());
+    }
+}

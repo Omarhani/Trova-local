@@ -1,0 +1,73 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Java hybrid/createEmployeeFromMobile.xml, case for case (owner 2026-11-11: one suite per scenario): register on the app, the admin approves on the web, the employee view, the employee logs in on the app. The check in / out cases moved to hybridCheckInAndOut-ts. Hybrid: one admin sign-in by quick calls, the employee deleted by API. -->
+<suite name="Create employee from the phone app (TS)">
+    <parameter name="browser" value="${browserType}"/>
+    <parameter name="signedInAs" value="Admin"/>
+    <parameter name="server" value="${serverType}"/>
+    <parameter name="employee_password_from" value="Mobile user"/>
+    <parameter name="employee_tag" value="mobCreate"/>
+
+    <test name="Log in programmatically">
+        <classes>
+            <class name="ts:tests/api/signIn/logIn.spec.ts">
+                <methods><include name="logInProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that a new employee can register from the app">
+        <groups><run><include name="Mob"/></run></groups>
+        <classes>
+            <class name="ts:tests/mobile/employeeAccount/employeeAccount.spec.ts">
+                <methods><include name="testVerifyThatANewEmployeeCanRegisterFromTheApp"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the admin can approve the registration request from the web">
+        <parameter name="expected_status" value="بانتظار التفعيل"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/employeeRegistration/employeeRegistration.spec.ts">
+                <methods><include name="testVerifyThatTheAdminCanApproveTheRegistrationRequestFromTheWeb"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the employee view shows the employee">
+        <parameter name="status" value="مفعل"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/employeeRegistration/employeeRegistration.spec.ts">
+                <methods><include name="testVerifyThatTheEmployeeViewShowsTheEmployee"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the approved employee can log in on the app">
+        <groups><run><include name="Mob"/></run></groups>
+        <classes>
+            <class name="ts:tests/mobile/employeeAccount/employeeAccount.spec.ts">
+                <methods><include name="testVerifyThatTheApprovedEmployeeCanLogInOnTheApp"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - sign the app out">
+        <parameter name="keepAppData" value="true"/>
+        <groups><run><include name="Mob"/></run></groups>
+        <classes>
+            <class name="ts:tests/mobile/employeeAccount/appSignOut.spec.ts">
+                <methods><include name="signOutOfTheAppProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - delete employee by API">
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeSetUp.spec.ts">
+                <methods><include name="cleanUpEmployeesProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

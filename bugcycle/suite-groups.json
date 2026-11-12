@@ -1,0 +1,12 @@
+{
+  "_comment": "Suite groups for bugcycle/run-group.js - paths are suiteFiles/<path>.xml without .xml; \"@name\" pulls another group in. Leave out utility suites (create / delete data on demand) and the *Regression suites (they include the others). One suite for now (web/webSmoke); add a group per new suite folder.",
+  "smoke": [
+    "web/webSmoke"
+  ],
+  "web": [
+    "web/webSmoke"
+  ],
+  "all": [
+    "@web"
+  ]
+}

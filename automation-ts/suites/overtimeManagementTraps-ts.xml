@@ -1,0 +1,154 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Overtime Management traps (TS)">
+    <parameter name="browser" value="${browserType}"/>
+    <parameter name="employee_login_2" value="Employee over Time 2"/>
+    <parameter name="overtime_reason" value="Trova overtime check"/>
+    <parameter name="reject_reason" value="Not needed"/>
+
+    <test name="Log in programmatically">
+        <parameter name="signedInAs" value="Account manager over Time"/>
+        <classes>
+            <class name="ts:tests/api/signIn/logIn.spec.ts">
+                <methods><include name="logInProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Set up - pending overtime request">
+        <parameter name="signedInAs" value="Account manager over Time"/>
+        <parameter name="manager_login" value="Account manager over Time"/>
+        <parameter name="employee_login" value="Employee over Time"/>
+        <classes>
+            <class name="ts:tests/api/overtimeManagement/overtimeManagementTrapsApi.spec.ts">
+                <methods><include name="setUpPendingOvertimeRequestForViews"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Set up - overtime request rejected">
+        <parameter name="signedInAs" value="Account manager over Time"/>
+        <parameter name="manager_login" value="Account manager over Time"/>
+        <parameter name="employee_login" value="Employee over Time"/>
+        <classes>
+            <class name="ts:tests/api/overtimeManagement/overtimeManagementTrapsApi.spec.ts">
+                <methods><include name="setUpRejectedOvertimeRequest"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 242 - Verify that a pending overtime request shows the status Approved in its details">
+        <parameter name="signedInAs" value="Account manager over Time"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/overtimeManagement/overtimeManagementTraps.spec.ts">
+                <methods><include name="testVerifyThatAPendingOvertimeRequestShowsTheStatusApprovedInItsDetails"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 245 - Verify that a rejected request shows no rejection reason">
+        <parameter name="signedInAs" value="Account manager over Time"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/overtimeManagement/overtimeManagementTraps.spec.ts">
+                <methods><include name="testVerifyThatARejectedRequestShowsNoRejectionReason"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 239 - Verify that the monthly balance field is hidden when overtime is on">
+        <parameter name="signedInAs" value="Account manager over Time"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/overtimeManagement/overtimeManagementTraps.spec.ts">
+                <methods><include name="testVerifyThatTheMonthlyBalanceFieldIsHiddenWhenOvertimeIsOn"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 241 - Verify that a minimum daily overtime above the maximum is saved">
+        <parameter name="signedInAs" value="Account manager over Time"/>
+        <parameter name="overtime_min_hours" value="4"/>
+        <parameter name="overtime_max_hours" value="3"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/overtimeManagement/overtimeManagementTraps.spec.ts">
+                <methods><include name="testVerifyThatAMinimumDailyOvertimeAboveTheMaximumIsSaved"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Set up - pending overtime request for Verify that rejecting with a reason approves the request">
+        <parameter name="signedInAs" value="Account manager over Time"/>
+        <parameter name="manager_login" value="Account manager over Time"/>
+        <parameter name="employee_login" value="Employee over Time"/>
+        <classes>
+            <class name="ts:tests/api/overtimeManagement/overtimeManagementTrapsApi.spec.ts">
+                <methods><include name="setUpPendingOvertimeRequestForRejectWithReason"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 244 - Verify that rejecting with a reason approves the request">
+        <parameter name="signedInAs" value="Account manager over Time"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/overtimeManagement/overtimeManagementTraps.spec.ts">
+                <methods><include name="testVerifyThatRejectingWithAReasonApprovesTheRequest"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Set up - pending overtime request for Verify that approving a pending request rejects it">
+        <parameter name="signedInAs" value="Account manager over Time"/>
+        <parameter name="manager_login" value="Account manager over Time"/>
+        <parameter name="employee_login" value="Employee over Time"/>
+        <classes>
+            <class name="ts:tests/api/overtimeManagement/overtimeManagementTrapsApi.spec.ts">
+                <methods><include name="setUpPendingOvertimeRequestForApprove"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 246 - Verify that approving a pending request rejects it">
+        <parameter name="signedInAs" value="Account manager over Time"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/overtimeManagement/overtimeManagementTraps.spec.ts">
+                <methods><include name="testVerifyThatApprovingAPendingRequestRejectsIt"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 240 - Verify that a negative monthly balance is saved">
+        <parameter name="signedInAs" value="Account manager over Time"/>
+        <parameter name="overtime_balance" value="-5"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/overtimeManagement/overtimeManagementTraps.spec.ts">
+                <methods><include name="testVerifyThatANegativeMonthlyBalanceIsSaved"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case 243 - Verify that rejecting without a reason rejects the request">
+        <parameter name="signedInAs" value="Account manager over Time"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/overtimeManagement/overtimeManagementTraps.spec.ts">
+                <methods><include name="testVerifyThatRejectingWithoutAReasonRejectsTheRequest"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up programmatically">
+        <parameter name="signedInAs" value="Account manager over Time"/>
+        <parameter name="manager_login" value="Account manager over Time"/>
+        <parameter name="employee_login" value="Employee over Time"/>
+        <classes>
+            <class name="ts:tests/api/overtimeManagement/overtimeManagementApi.spec.ts">
+                <methods><include name="cleanUpProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

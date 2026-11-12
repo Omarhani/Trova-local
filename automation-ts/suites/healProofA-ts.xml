@@ -1,0 +1,34 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Self-healing proof A (Omar 2026-11-11): our renamed locator - AI help gets past it and a treatment WAITS for the tester (the case itself shows Blocked "needs a look" until the treatment is approved); a pop-up in the way must be closed by the AI and the case PASS. Work plans page only, nothing saved. -->
+<suite name="Self-healing proof A (TS)">
+    <parameter name="browser" value="${browserType}"/>
+    <parameter name="signedInAs" value="Admin"/>
+
+    <test name="Log in programmatically">
+        <classes>
+            <class name="ts:tests/api/signIn/logIn.spec.ts">
+                <methods><include name="logInProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- designed end: AI help gets past, treatment WAITING -->
+    <test name="Case - Our renamed locator ends Blocked (needs a look)">
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/healProof/healProof.spec.ts">
+                <methods><include name="healOurRenamedLocator"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- designed end: PASSED with AI help -->
+    <test name="Case - A pop-up in the way is closed by the AI and the case passes">
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/healProof/healProof.spec.ts">
+                <methods><include name="healPopupInTheWay"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

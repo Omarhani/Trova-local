@@ -1,0 +1,100 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Java hybrid/fullHybridCycleCheckInAndOut.xml: the employee (made by API) logs in on the app, checks in and out, the admin updates them on the web, the attendance report shows the update. Hybrid: one admin sign-in by quick calls. -->
+<suite name="Check in and out - app and web (TS)">
+    <parameter name="browser" value="${browserType}"/>
+    <parameter name="signedInAs" value="Admin"/>
+    <parameter name="server" value="${serverType}"/>
+    <parameter name="employee_password_from" value="Mobile user"/>
+    <parameter name="employee_tag" value="hybridCheck"/>
+
+    <test name="Log in programmatically">
+        <classes>
+            <class name="ts:tests/api/signIn/logIn.spec.ts">
+                <methods><include name="logInProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Set-up - Create employee by API">
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeSetUp.spec.ts">
+                <methods><include name="approvedEmployeeProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the approved employee can log in on the app">
+        <groups><run><include name="Mob"/></run></groups>
+        <classes>
+            <class name="ts:tests/mobile/employeeAccount/employeeAccount.spec.ts">
+                <methods><include name="testVerifyThatTheApprovedEmployeeCanLogInOnTheApp"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the employee can check in from the app">
+        <parameter name="keepAppData" value="true"/>
+        <groups><run><include name="Mob"/></run></groups>
+        <classes>
+            <class name="ts:tests/mobile/employeeAccount/employeeAttendance.spec.ts">
+                <methods><include name="testVerifyThatTheEmployeeCanCheckInFromTheApp"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the employee can check out from the app">
+        <parameter name="keepAppData" value="true"/>
+        <groups><run><include name="Mob"/></run></groups>
+        <classes>
+            <class name="ts:tests/mobile/employeeAccount/employeeAttendance.spec.ts">
+                <methods><include name="testVerifyThatTheEmployeeCanCheckOutFromTheApp"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the admin can update the app's check in and out from the web">
+        <parameter name="check_in" value="9:00 am"/>
+        <parameter name="check_out" value="6:00 pm"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/attendance/appAttendanceOnWeb.spec.ts">
+                <methods><include name="testVerifyThatTheAdminCanUpdateTheAppCheckInAndOutFromTheWeb"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Case - Verify that the attendance report shows the updated check in and out">
+        <parameter name="attendance_time" value="09:00"/>
+        <parameter name="cancellation_time" value="18:00"/>
+        <parameter name="actual_working_hours" value="09:00"/>
+        <parameter name="late_arrival" value="00:00"/>
+        <parameter name="early_arrival" value="00:00"/>
+        <parameter name="shortage_of_attendance" value="00:00"/>
+        <parameter name="early_check_out" value="00:00"/>
+        <parameter name="overtime" value="00:00"/>
+        <groups><run><include name="Web"/></run></groups>
+        <classes>
+            <class name="ts:tests/web/attendance/appAttendanceOnWeb.spec.ts">
+                <methods><include name="testVerifyThatTheReportShowsTheUpdatedCheckInAndOut"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - sign the app out">
+        <parameter name="keepAppData" value="true"/>
+        <groups><run><include name="Mob"/></run></groups>
+        <classes>
+            <class name="ts:tests/mobile/employeeAccount/appSignOut.spec.ts">
+                <methods><include name="signOutOfTheAppProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Clean up - delete employee by API">
+        <classes>
+            <class name="ts:tests/api/employeeCycle/employeeSetUp.spec.ts">
+                <methods><include name="cleanUpEmployeesProgrammatically"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>
