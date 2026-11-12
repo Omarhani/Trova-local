@@ -2,17 +2,19 @@ import { adminLogin } from '../../../src/api/flows/employeeValues';
 import { adminServices } from '../../../src/api/flows/runEmployeeMaker';
 import { AppApi } from '../../../src/api/appApi';
 import { Movement, MovementKind, SideNames, TransactionsApi } from '../../../src/api/services/transactionsApi';
+import { daysAround, todaysMovements, zoneOfRows } from '../../../src/api/services/movementDays';
+import { Row } from '../../../src/api/rows';
+import { accountClock, attendanceClock } from '../../../src/data/appClock';
 import { NewEmployee } from '../../../src/data/newEmployee';
-import { dayPlus } from '../../../src/data/overtimeDays';
 
 /**
  * The run's employee's check ins and check outs as the admin's API lists them (Java TransactionsApi.getDayMovements) -
  * the proof by API of the attendance cases and their set-up. Only the run's own employee is ever read or written.
  */
 
-/** today as yyyy-MM-dd on this computer's calendar (the phone, the portal and the runner are on the same day) */
+/** today as yyyy-MM-dd on the app's attendance clock (the gate's, as the server files movements), never the computer's */
 export function today(): string {
-  return dayPlus(0);
+  return attendanceClock.today();
 }
 
 /** the employee's user id from Employees (one registered on the app has none kept by the run) */
@@ -27,8 +29,22 @@ export async function transactions(): Promise<TransactionsApi> {
   return new TransactionsApi(await AppApi.signedInAs(adminLogin(), 'web'));
 }
 
-export async function movementsOn(e: NewEmployee, day = today()): Promise<Movement[]> {
-  return (await transactions()).dayMovements(await userIdOf(e), day);
+/** the employee's movements of a day; no day = today's on the app's own clock (run 1026: near midnight the days differ) */
+export async function movementsOn(e: NewEmployee, day?: string): Promise<Movement[]> {
+  if (day) return (await transactions()).dayMovements(await userIdOf(e), day);
+  const now = Date.now();
+  const rows = await rowsAround(e, now);
+  return todaysMovements(rows, now, attendanceClock.offsetMin());
+}
+
+/** the server's rows of the days around the account's day; the attendance clock learns the gate's from them */
+export async function rowsAround(e: NewEmployee, now = Date.now()): Promise<Row[]> {
+  const api = await transactions();
+  const userId = await userIdOf(e);
+  const days = await Promise.all(daysAround(now, accountClock.offsetMin()).map((d) => api.dayRows(userId, d)));
+  const rows = days.flat();
+  attendanceClock.learn(zoneOfRows(rows));
+  return rows;
 }
 
 /** the times ("HH:mm") of one kind of movement */

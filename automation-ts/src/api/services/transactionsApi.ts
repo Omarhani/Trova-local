@@ -58,8 +58,13 @@ export class TransactionsApi {
 
   /** every movement the server holds for the employee on day (yyyy-MM-dd), oldest first */
   async dayMovements(userId: string, day: string): Promise<Movement[]> {
+    return movementsOf(await this.dayRows(userId, day));
+  }
+
+  /** the server's own rows of the day (each with its CreateDate and its clock, LocalTimeZone) */
+  async dayRows(userId: string, day: string): Promise<Row[]> {
     const body = { pageNumber: 1, pageSize: 100, data: { Date: day, UserID: userId, EmployeeType: '' } };
-    return movementsOf(rowsOf(await this.post('Transaction/GetAllTransactionsByUserId', body)));
+    return rowsOf(await this.post('Transaction/GetAllTransactionsByUserId', body));
   }
 
   /** the admin adds a movement of kind at time ("HH:mm") on day; a check out needs the day's check in first */

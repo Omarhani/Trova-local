@@ -1,7 +1,8 @@
+import { accountClock } from './appClock';
 import { dayPlus } from './overtimeDays';
 
 /** the day the data word means: "tomorrow" (also empty) or a date (yyyy-MM-dd) - WorkPlanApi.day */
-export function dayOf(word: string, from: Date = new Date()): string {
+export function dayOf(word: string, from: Date = accountClock.wallNow()): string {
   const w = word.trim();
   return w === '' || w.toLowerCase() === 'tomorrow' ? dayPlus(1, from) : w;
 }
@@ -10,7 +11,7 @@ export function dayOf(word: string, from: Date = new Date()): string {
 const DAYS_OFF = [5, 6];
 
 /** like dayOf, but "tomorrow" (also empty) is the next working day of the plan - run 893: on Thursday "tomorrow" had no shift */
-export function workDayOf(word: string, from: Date = new Date()): string {
+export function workDayOf(word: string, from: Date = accountClock.wallNow()): string {
   const w = word.trim();
   if (w !== '' && w.toLowerCase() !== 'tomorrow') return w;
   let ahead = 1;

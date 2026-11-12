@@ -2,16 +2,16 @@ import { randomBytes } from 'node:crypto';
 import { trovaTest as test } from '../../../src/run/trovaTest';
 import { AppApi } from '../../../src/api/appApi';
 import { OvertimeApi, PENDING } from '../../../src/api/services/overtimeApi';
+import { dayPlus } from '../../../src/data/overtimeDays';
 import { param } from '../../../src/run/blockParams';
 import { runRecords } from '../../../src/run/runRecords';
 import { checkTrue } from '../../../src/report/checks';
 
 const MADE = 'overtimeRequests'; // "<login>|<id>": the clean-up withdraws each as the employee who made it
 
-/** today on this computer, yyyy-MM-dd (the app takes today only: the manager's page shows today, earlier days are refused) */
+/** today on the app's own clock, yyyy-MM-dd (the app takes today only: the manager's page shows today, earlier days are refused) */
 function today(): string {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  return dayPlus(0);
 }
 
 /** the employees that may send it, in order: one request per employee per day, so the second when the first has one today */
