@@ -12,6 +12,7 @@ import { runSignInBook } from './runSignInBook';
 import { sharedSignIn } from './sharedSignIn';
 import { callsChanged } from './signInCallsChanged';
 import { cleanUpRole, cleanUpSignIn } from './cleanUpSignIn';
+import { signInLine } from '../records/signInLine';
 import { SetUpProblem, setUpSaid, SignInProblem } from '../report/failureKind';
 
 /** the side a sign-in is made for: the web app's API, or the phone app's (its own recipe, on the mobile API) */
@@ -95,7 +96,7 @@ async function fresh(key: string, login: string, side: Side, again: boolean): Pr
   if (!result.token) throw new Error(`The sign-in as ${login} gave no token`);
   runSignIns.keep(key, result);
   // Network marks these calls "API" (the test's own client); the page's own calls (its GetAccountIdByCode on opening ...) are "Web"
-  console.log(`Signed in as ${login} by Trova's own API calls - the run's one sign-in (no sign-in page)`);
+  console.log(`${signInLine(login, 'api')} - Trova's own sign-in calls, the run's one sign-in (no sign-in page)`);
   return result;
 }
 
@@ -103,11 +104,11 @@ async function fresh(key: string, login: string, side: Side, again: boolean): Pr
 function heldSignIn(key: string, login: string, side: Side): SignInResult | undefined {
   const earlier = runSignIns.get(key);
   if (earlier) {
-    console.log(`Signed in as ${login} with this run's sign-in (no sign-in calls)`);
+    console.log(signInLine(login, 'api', "this run's sign-in reused (no sign-in calls)"));
     return earlier;
   }
   const shared = plainly(() => sharedSignIn(login, side === 'phone'));
-  if (shared) console.log(`Signed in as ${login} with the sign-in Trova shares (no new sign-in)`);
+  if (shared) console.log(signInLine(login, 'api', 'the sign-in Trova shares (no new sign-in)'));
   return shared;
 }
 

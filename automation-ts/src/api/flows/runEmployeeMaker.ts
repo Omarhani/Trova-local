@@ -1,5 +1,7 @@
 import { NewEmployee } from '../../data/newEmployee';
 import { MissingData } from '../../report/failureKind';
+import { madeChecked } from '../../records/checkedSetUp';
+import { EMPLOYEE } from '../records/recordKeys';
 import { runEmployees } from '../../run/runEmployee';
 import { AppApi } from '../appApi';
 import { PhoneGuestApi } from '../phoneGuestApi';
@@ -27,8 +29,9 @@ export async function makePendingEmployee(): Promise<NewEmployee> {
   }
   const phone = new EmployeeSignUpApi(new PhoneGuestApi());
   const signedUp = await phone.signUp(await phone.accountId(accountCode()), e, signUpExtras());
-  if (!signedUp.ok) throw new Error(`Set-up: the app refused the sign-up of ${e.userName}: ${signedUp.message}`);
-  const made: NewEmployee = { ...e, id: String(signedUp.data.ID ?? ''), state: 'pending' };
+  if (signedUp.ok) runEmployees.keep({ ...e, state: 'pending' }); // from here the request exists - the clean-up deletes it
+  const id = madeChecked(EMPLOYEE, { ...signedUp, id: String(signedUp.data.ID ?? '') }, e.userName); // "Made employee id 512"
+  const made: NewEmployee = { ...e, id, state: 'pending' };
   runEmployees.keep(made);
   await phone.chooseNoBiometrics();
   return made;

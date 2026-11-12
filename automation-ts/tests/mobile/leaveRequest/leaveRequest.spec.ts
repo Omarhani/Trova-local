@@ -1,14 +1,16 @@
-import { LEAVE_PENDING, leaveRecords } from '../../../src/api/services/leaveRequestsApi';
+import { leaveRequestKind } from '../../../src/api/records/leaveRequestKind';
+import { LEAVE_REQUEST } from '../../../src/api/records/recordKeys';
+import { LEAVE_PENDING } from '../../../src/api/services/leaveRequestsApi';
 import { ymd } from '../../../src/data/leaveDay';
-import { cleanUpMade } from '../../../src/run/cleanUpMade';
-import { runRecords } from '../../../src/run/runRecords';
+import { cleanUpRun } from '../../../src/records/cleanUpByIds';
+import { madeRecords } from '../../../src/records/madeRecords';
 import { checkEquals, checkTrue } from '../../../src/report/checks';
 import { phoneTest as test } from '../../../src/phone/phoneTest';
 import { countersOf, sameEmployee } from '../../../src/phone/screens/leaveCards';
 import { LeaveRequestScreen } from '../../../src/phone/screens/LeaveRequestScreen';
-import { leaveNoteKey, notesByEmployee } from '../../../src/data/leaveNotesOfRun';
+import { leaveNoteKey } from '../../../src/data/leaveNotesOfRun';
 import { runEmployees } from '../../../src/run/runEmployee';
-import { employeeLeaves, leaveEmployee, leavePlan, MADE_NOTES, openAppAs, sentRow, signInAgainAsTheEmployee } from './leaveOnPhone';
+import { employeeLeaves, leaveEmployee, leavePlan, openAppAs, sentRow, signInAgainAsTheEmployee } from './leaveOnPhone';
 
 /**
  * Send a leave request from the phone app - the TS twin of Java mob/mobLeaveRequest on the employee this run made by API
@@ -41,7 +43,7 @@ test('testVerifyThatAnEmployeeCanSendALeaveRequestFromThePhoneApp', async ({ pho
   checkTrue(`My requests · the app is signed in as ${e.userName}`, matches,
     'its requests are not the employee\'s own list');
 
-  runRecords.keep(MADE_NOTES, leaveNoteKey(e.userName, toSend.note)); // from here the request may exist - the clean-up looks for it
+  madeRecords.keep(LEAVE_REQUEST, leaveNoteKey(e.userName, toSend.note)); // from here the request may exist - the clean-up looks for it
   const answer = await screen.send(toSend);
   checkTrue('Send · the app says the request was sent', answer.ok, answer.text ? `the app said "${answer.text}"` : 'no message');
 
@@ -57,22 +59,13 @@ test('testVerifyThatAnEmployeeCanSendALeaveRequestFromThePhoneApp', async ({ pho
 });
 
 /**
- * deletes by the employee's API only the requests this run sent (found by their note) and checks each is gone - before
- * the employee itself is deleted; a request of an employee the run no longer has stays listed as left
+ * deletes by id, as the employee, exactly the requests this run sent (found by their note) and reads each back gone -
+ * "Deleted leave request id <id>" - before the employee itself is deleted. A request of an employee the run no longer
+ * has FAILS the clean-up; nothing sent = "Nothing to delete - this run made no leave request".
  */
 test('cleanUpLeaveRequestsProgrammatically', async () => {
-  const made = runRecords.newestFirst(MADE_NOTES);
-  test.skip(made.length === 0, 'Nothing was sent by this run - nothing to delete');
-  const left: string[] = [];
-  for (const [userName, notes] of notesByEmployee(made)) {
+  await cleanUpRun([leaveRequestKind(async (userName) => {
     const e = runEmployees.current();
-    if (e?.userName !== userName) {
-      left.push(...notes);
-      continue;
-    }
-    const gone = (note: string) => runRecords.forget(MADE_NOTES, leaveNoteKey(userName, note));
-    left.push(...await cleanUpMade(notes, leaveRecords(await employeeLeaves(e)), gone));
-  }
-  checkTrue(`Clean-up · the ${made.length} leave request(s) this run sent are gone from the employee's list`, left.length === 0,
-    left.length ? `still listed: ${left.join(', ')}` : '');
+    return e?.userName === userName ? employeeLeaves(e) : undefined;
+  })]);
 });

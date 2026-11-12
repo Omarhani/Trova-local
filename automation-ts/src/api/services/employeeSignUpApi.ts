@@ -31,7 +31,7 @@ export class EmployeeSignUpApi {
   }
 
   /** the sign-up form sent; the employee is signed in by its answer when the app took it */
-  async signUp(accountId: string, e: NewEmployee, x: SignUpExtras): Promise<{ ok: boolean; message: string; data: Record<string, unknown> }> {
+  async signUp(accountId: string, e: NewEmployee, x: SignUpExtras): Promise<{ ok: boolean; status: number; message: string; data: Record<string, unknown> }> {
     const answer = await this.phone.post('User/signup', {
       UserName: e.userName, Password: x.password, AccountID: accountId, FirstName: e.firstName, LastName: e.lastName,
       LanguageID: x.languageId, UserStatesID: null, UserRoles: null, JobNumber: e.jobNumber, DepartmentID: null,
@@ -39,7 +39,7 @@ export class EmployeeSignUpApi {
     });
     const said = appAnswer(answer);
     if (said.ok) this.phone.keepSignedIn(answer);
-    return { ...said, data: ((json(answer) as { Data?: Record<string, unknown> } | null)?.Data) ?? {} };
+    return { ...said, status: answer.status, data: ((json(answer) as { Data?: Record<string, unknown> } | null)?.Data) ?? {} };
   }
 
   /** "بدون سمات حيويه" on the attendance set-up screen: the employee waits for the admin (state 0) */

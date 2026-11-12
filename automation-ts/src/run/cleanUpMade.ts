@@ -5,6 +5,7 @@ export interface RecordApi {
 }
 
 /**
+ * Not for clean-up blocks any more (Omar 2026-11-13): they use records/cleanUpByIds - delete by id, read back by id.
  * Hybrid clean-up: deletes by API only the records this run made (the values it kept), then checks by API that each is
  * gone; a gone one is forgotten. Gives back the ones still there - the clean-up step fails on them. Round 2: the
  * records are independent (each its own value), so they are cleaned at the same time; one whose call fails is given

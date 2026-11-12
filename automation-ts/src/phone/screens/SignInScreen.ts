@@ -2,7 +2,8 @@ import { AppiumBy } from '../../web/by';
 import { PhoneActions } from '../phoneActions';
 import type { Phone } from '../phoneSession';
 import { setChecked } from '../../core/checkTap';
-import { nextSignInStep, SignInScreen as Seen, SignInStep } from '../phoneSignInSteps';
+import { appSignInExtra, nextSignInStep, SignInScreen as Seen, SignInStep } from '../phoneSignInSteps';
+import { signInStep } from '../../records/signInLine';
 import { ScreenSnapshot } from '../screenSnapshot';
 import { phoneSignInOnce } from '../phoneSignInOnce';
 import { SIGN_OUT_OK, signOutMessageOf } from './appSignOutMessage';
@@ -36,17 +37,20 @@ export class SignInScreen extends PhoneActions {
 
   /** item 9: ONE sign-in per login and run - after a failure the later cases of the login stop at once */
   async signIn(login: PhoneLogin, env: string): Promise<void> {
-    return phoneSignInOnce(login.userName, () => this.signInSteps(login, env));
+    return phoneSignInOnce(login.userName, async () => {
+      const done = await this.signInSteps(login, env);
+      signInStep(login.userName, 'app', appSignInExtra(done)); // rule 3: the user and the way
+    });
   }
 
-  private async signInSteps(login: PhoneLogin, env: string): Promise<void> {
+  private async signInSteps(login: PhoneLogin, env: string): Promise<Set<string>> {
     const done = new Set<string>();
     const until = Date.now() + 90_000;
     let last = '';
     let same = 0;
     while (Date.now() < until) {
       const step = nextSignInStep(this.seen(await this.look()), env, done);
-      if (step.kind === 'done') return;
+      if (step.kind === 'done') return done;
       if (step.kind === 'stop') throw new Error(step.why);
       const key = JSON.stringify(step);
       same = key === last ? same + 1 : 0;

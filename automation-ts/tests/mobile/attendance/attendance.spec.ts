@@ -1,6 +1,7 @@
 import { param } from '../../../src/run/blockParams';
 import { credentials, runLogin } from '../../../src/run/credentials';
 import { checkEquals, checkTrue } from '../../../src/report/checks';
+import { signInLine } from '../../../src/records/signInLine';
 import { Phone } from '../../../src/phone/phoneSession';
 import { testData } from '../../../src/run/testData';
 import { phoneTest as test } from '../../../src/phone/phoneTest';
@@ -13,7 +14,7 @@ test('testVerifyThatAnEmployeeCanSignInOnThePhoneAndCheckIn', async ({ phone }) 
   const login = runLogin(param('signedInAs', 'Mobile user'));
   const home = new HomeScreen(phone);
   await signInOnScreen(phone, login, param('server', testData.env()));
-  checkTrue('Sign-in · home shows', await home.isShown());
+  checkTrue(`${signInLine(credentials.get(login, 'Username|User name|User|Email'), 'app')} - home shows`, await home.isShown());
   const attendance = new AttendanceScreen(phone);
   // set-up: a check-in left by an earlier run is checked out first, so the case starts checked out
   await checkOut(home, attendance, 'Set-up');

@@ -12,9 +12,6 @@ import { HomeAccount } from '../../../src/phone/screens/HomeAccount';
 import { LeaveToSend } from '../../../src/phone/screens/LeaveRequestScreen';
 import { signInAs } from '../employeeAccount/employeeOnPhone';
 
-/** run records kind: "<employee user name>|<note>" of the leave requests this run sent (kept BEFORE Send - the clean-up looks for each) */
-export const MADE_NOTES = 'leaveRequestNotes';
-
 /** the employee the suite runs as on the phone and on its API: the one this run made by API (Java mob/mobLeaveRequest) */
 export async function leaveEmployee(): Promise<NewEmployee> {
   return approvedEmployeeOfRun();

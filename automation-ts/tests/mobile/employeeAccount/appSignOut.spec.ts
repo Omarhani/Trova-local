@@ -3,6 +3,9 @@ import { phoneTest as test } from '../../../src/phone/phoneTest';
 import { onPhone } from '../../../src/phone/phoneGone';
 import { signOutByClearing } from '../../../src/phone/phoneReset';
 import { testData } from '../../../src/run/testData';
+import { param } from '../../../src/run/blockParams';
+import { runLogin } from '../../../src/run/credentials';
+import { runEmployees } from '../../../src/run/runEmployee';
 
 /**
  * Clean-up on the phone before the employee is deleted (Test 8094 run 658: hybrid 64 deleted its employee while the app
@@ -12,6 +15,17 @@ import { testData } from '../../../src/run/testData';
  */
 test('signOutOfTheAppProgrammatically', async ({ phone }) => {
   const call = (command: string, args: Record<string, unknown>) => onPhone(() => phone.execute(command, args));
-  checkTrue('Sign-out · the app is closed with its data cleared (no user signed in on the phone)',
+  checkTrue(`Sign out ${userOnThePhone()} - the app is closed with its data cleared (no user signed in on the phone)`,
     await signOutByClearing(call, testData.mobile().appPackage));
 });
+
+/** who the app was signed in as: the run's employee, else the block's login; naming it never fails the sign-out */
+function userOnThePhone(): string {
+  const made = runEmployees.current()?.userName;
+  if (made) return made;
+  try {
+    return runLogin(param('signedInAs', ''));
+  } catch {
+    return "the app's user";
+  }
+}

@@ -1,5 +1,5 @@
 import { accountClock } from '../../data/appClock';
-import { appAnswer } from '../appAnswer';
+import { CallResult, resultOf } from '../../records/recordKind';
 import { AppApi, ok } from '../appApi';
 
 /** one row of the manager's overtime list, the fields the set-up and clean-up use */
@@ -18,8 +18,8 @@ export const REJECTED = 2;
  */
 export class OvertimeApi {
   /** the employee sends a request for day (yyyy-MM-dd); ok + the app's own words when it refused (one request per day ...) */
-  static async create(employee: AppApi, day: string, hours: number, reason: string): Promise<{ ok: boolean; message: string }> {
-    return appAnswer(await employee.call('POST /overtimeRequests/Create',
+  static async create(employee: AppApi, day: string, hours: number, reason: string): Promise<CallResult> {
+    return resultOf(await employee.call('POST /overtimeRequests/Create',
       { RequestDate: `${day}T00:00:00`, RequestedMinutes: hours * 60, Reason: reason }));
   }
 

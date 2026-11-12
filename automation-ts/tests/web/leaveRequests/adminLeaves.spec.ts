@@ -1,4 +1,6 @@
 import { approvedEmployeeOfRun } from '../../../src/api/flows/runEmployeeMaker';
+import { WEB_LEAVE } from '../../../src/api/records/recordKeys';
+import { madeRecords } from '../../../src/records/madeRecords';
 import { runRecords } from '../../../src/run/runRecords';
 import { checkEquals } from '../../../src/report/checks';
 import { LeavesPage } from '../../../src/web/pages/LeavesPage';
@@ -51,5 +53,5 @@ test('testVerifyThatTheAdminCanDeleteTheEmployeesLeaveFromTheWeb', async ({ page
   checkEquals('Delete leave · toast', await leaves.toastShows(DONE), DONE);
   checkEquals('Requests list · status after the delete (the row stays)', await leaves.statusBecomes(id, LEAVE_DELETED), LEAVE_DELETED);
   checkEquals('API · the leave is deleted', await (await adminLeaves()).statusOf(id), LEAVE_DELETED);
-  runRecords.forget(MADE_WEB_LEAVES, key);
+  madeRecords.deletedByTest(WEB_LEAVE, key); // the clean-up reads it back by id, never claims it gone
 });

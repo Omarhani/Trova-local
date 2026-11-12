@@ -1,10 +1,13 @@
 import { appAnswer } from '../appAnswer';
 import { AppApi, ok } from '../appApi';
+import { json } from '../http';
 import { time24, usDate } from '../../data/workPlanValues';
-import { runRecords } from '../../run/runRecords';
+import { madeChecked } from '../../records/checkedSetUp';
+import { resultOf } from '../../records/recordKind';
+import { WORK_PLAN } from '../records/recordKeys';
 
-/** run records kind: the names of the plans this run made (the clean-up finds them by name) */
-export const MADE_PLANS = 'workPlanNames';
+/** run records kind: the names of the plans this run made (the clean-up finds them by name, deletes them by id) */
+export const MADE_PLANS = WORK_PLAN.key;
 const EGYPT = 11;
 
 type Row = Record<string, unknown>;
@@ -26,12 +29,16 @@ export interface ShiftToAdd {
 export class WorkPlanApi {
   constructor(private readonly api: AppApi) {}
 
-  /** adds a plan for every day of the week and keeps its name for the clean-up; its id */
+  /**
+   * adds a plan for every day of the week - a checked step: the app must take it and answer its id ("Made work plan id
+   * 41"), else it FAILS with the app's words; kept by its name for the clean-up as soon as the app took it
+   */
   async addPlan(name: string, country: string): Promise<string> {
     if (country !== 'مصر') throw new Error(`The plan set-up knows only the country مصر (asked for "${country}")`);
-    const answer = ok(await this.api.call('POST /WorkPlan/AddWorkPlan', { Name: name, CountryID: EGYPT }), 'WorkPlan/AddWorkPlan') as Row;
-    runRecords.keep(MADE_PLANS, name);
-    return String(answer?.Data ?? '');
+    const answer = await this.api.call('POST /WorkPlan/AddWorkPlan', { Name: name, CountryID: EGYPT });
+    const data = (json(answer) as Row | null)?.Data;
+    const id = typeof data === 'string' || typeof data === 'number' ? String(data) : '';
+    return madeChecked(WORK_PLAN, { ...resultOf(answer), id }, name);
   }
 
   /** adds a daily shift to the plan; ok = HTTP 2xx (as KnownCall.okOrSkip), else the app's own words */

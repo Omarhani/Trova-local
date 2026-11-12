@@ -1,7 +1,8 @@
 import { LEAVE_PENDING } from '../../../src/api/services/leaveRequestsApi';
 import { accountClock } from '../../../src/data/appClock';
 import { dmy, ymd } from '../../../src/data/leaveDay';
-import { runRecords } from '../../../src/run/runRecords';
+import { LEAVE_REQUEST } from '../../../src/api/records/recordKeys';
+import { madeRecords } from '../../../src/records/madeRecords';
 import { checkEquals, checkTrue } from '../../../src/report/checks';
 import { phoneTest as test } from '../../../src/phone/phoneTest';
 import { Phone } from '../../../src/phone/phoneSession';
@@ -11,7 +12,7 @@ import { isOneDay } from '../../../src/phone/screens/leaveDetails';
 import { LeaveRequestScreen, MyRequests } from '../../../src/phone/screens/LeaveRequestScreen';
 import { leaveNoteKey } from '../../../src/data/leaveNotesOfRun';
 import { NewEmployee } from '../../../src/data/newEmployee';
-import { employeeLeaves, leaveEmployee, MADE_NOTES, openAppAs, signInAgainAsTheEmployee } from './leaveOnPhone';
+import { employeeLeaves, leaveEmployee, openAppAs, signInAgainAsTheEmployee } from './leaveOnPhone';
 import { goneFromList, sentByApi } from './sentByApi';
 
 /**
@@ -75,5 +76,5 @@ test('testVerifyThatTheEmployeeCanDeleteAPendingRequestInTheApp', async ({ phone
   checkEquals('My requests · the Pending count went down by 1', await screen.pendingCountBecomes(expected, 15, expected === 0), expected); // 0 = no count shown
   const gone = await goneFromList(leaves, toSend.note);
   checkTrue("API · the request is gone from the employee's own list", gone, `request ${row.ID} is still listed`);
-  if (gone) runRecords.forget(MADE_NOTES, leaveNoteKey(e.userName, toSend.note));
+  if (gone) madeRecords.deletedByTest(LEAVE_REQUEST, leaveNoteKey(e.userName, toSend.note)); // the clean-up reads it back
 });

@@ -1,6 +1,7 @@
 import { caseRecords } from '../../../src/run/caseRecords';
 import { param } from '../../../src/run/blockParams';
 import { checkContains, checkEquals, checkFalse, checkTrue } from '../../../src/report/checks';
+import { runSignInLine } from '../../../src/records/runSignInLine';
 import { refusedPage } from '../../../src/web/pageFacts';
 import { OvertimeRequestsPage } from '../../../src/web/pages/OvertimeRequestsPage';
 import { OvertimeSettingsPage } from '../../../src/web/pages/OvertimeSettingsPage';
@@ -17,7 +18,7 @@ const MIN_ABOVE_MAX = 'لا يمكن أن يكون الحد الأدنى للو�
 
 /** passes only when the app really opened signed in (the page fixture signs in once and refuses a sign-in page) */
 test('logInProgrammatically', async ({ page }) => {
-  checkFalse('Sign-in · the app opened signed in', refusedPage(page.url()));
+  checkFalse(`${runSignInLine()} - the app opened signed in`, refusedPage(page.url()));
 });
 
 test('testVerifyThatTheMonthlyBalanceFieldShowsWhenOvertimeIsOn', async ({ page }) => {

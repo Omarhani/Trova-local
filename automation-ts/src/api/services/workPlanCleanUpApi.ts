@@ -1,9 +1,9 @@
 import { accountClock } from '../../data/appClock';
 import { dayOf, workDayOf } from '../../data/workPlanValues';
-import { appAnswer } from '../appAnswer';
 import { AppApi, ok } from '../appApi';
 import { listOf, Row } from '../rows';
 import { shiftWithoutEmployees } from './shiftWithoutEmployees';
+import { CallResult, resultOf } from '../../records/recordKind';
 
 const CURRENT_AND_FUTURE = 2;
 
@@ -29,17 +29,20 @@ export class WorkPlanCleanUpApi {
 
   /** the plan's row (ID, Name, WeeklyDays) of exactly this name; undefined when there is none */
   async plan(name: string): Promise<Row | undefined> {
-    const answer = ok(await this.admin.post(this.path('WorkPlan/GetAllWorkPlans'), { pageSize: 0, data: {} }), 'WorkPlan/GetAllWorkPlans');
-    return listOf(answer).find((p) => p.Name === name);
+    return (await this.plans()).find((p) => p.Name === name);
   }
 
-  /** deletes the plan and its shifts; nothing to do when it is not there */
-  async deletePlanWithShifts(name: string): Promise<void> {
-    const plan = await this.plan(name);
-    if (!plan) return;
+  /** the follow-up read by id: the plan's row, undefined when it is gone */
+  async planWithId(id: string): Promise<Row | undefined> {
+    return (await this.plans()).find((p) => String(p.ID) === id);
+  }
+
+  /** deletes the plan by its id with every shift in it; the app's answer to the plan's delete */
+  async deleteById(id: string): Promise<CallResult> {
+    const plan = await this.planWithId(id);
+    if (!plan) return { ok: false, status: 404, message: `no work plan with id ${id} in the list` };
     await this.deleteShifts(plan, () => true);
-    const said = appAnswer(await this.admin.post(this.path('WorkPlan/DeleteWorkPlan'), { data: String(plan.ID) }));
-    if (!said.ok) throw new Error(`The app refused to delete the plan ${name}: ${said.message}`);
+    return resultOf(await this.admin.post(this.path('WorkPlan/DeleteWorkPlan'), { data: String(plan.ID) }));
   }
 
   /**
@@ -84,6 +87,10 @@ export class WorkPlanCleanUpApi {
     const rows = (answer as { Data?: Row[] } | null)?.Data ?? [];
     const shifts = rows.filter((r) => r.ItemType === undefined || r.ItemType === null || Number(r.ItemType) === 1);
     return [...new Set(shifts.map((r) => String(r.ID)))];
+  }
+
+  private async plans(): Promise<Row[]> {
+    return listOf(ok(await this.admin.post(this.path('WorkPlan/GetAllWorkPlans'), { pageSize: 0, data: {} }), 'WorkPlan/GetAllWorkPlans'));
   }
 
   private async view(shiftId: string, day: string): Promise<Row> {

@@ -3,6 +3,7 @@ import { dayOf, time24 } from '../../../src/data/workPlanValues';
 import { param } from '../../../src/run/blockParams';
 import { runRecords } from '../../../src/run/runRecords';
 import { checkEquals, checkFalse, checkTrue } from '../../../src/report/checks';
+import { runSignInLine } from '../../../src/records/runSignInLine';
 import { refusedPage } from '../../../src/web/pageFacts';
 import { WorkPlansPage } from '../../../src/web/pages/WorkPlansPage';
 import { webTest as test } from '../../../src/web/webTest';
@@ -13,7 +14,7 @@ const DELETE_CURRENT_AND_FUTURE = 'حذف المناوبة الحاليه و ا�
 
 /** passes only when the app really opened signed in (the page fixture signs in once and refuses a sign-in page) */
 test('logInProgrammatically', async ({ page }) => {
-  checkFalse('Sign-in · the app opened signed in', refusedPage(page.url()));
+  checkFalse(`${runSignInLine()} - the app opened signed in`, refusedPage(page.url()));
 });
 
 test('testVerifyThatG1VerifyThatAddingANewPlanSavesIt', async ({ page }) => {

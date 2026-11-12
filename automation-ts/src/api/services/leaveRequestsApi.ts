@@ -4,6 +4,7 @@ import { LeaveToSend } from '../../data/leaveToSend';
 import { LeaveCategory } from '../../data/leaveTypes';
 import { Json } from '../../run/runDataFile';
 import { RecordApi } from '../../run/cleanUpMade';
+import { CallResult, resultOf } from '../../records/recordKind';
 import { appAnswer } from '../appAnswer';
 import { HttpAnswer, json } from '../http';
 import { phoneEnvelope } from '../phoneEnvelope';
@@ -57,11 +58,11 @@ export class LeaveRequestsApi {
    * the new-leave form's Send for a whole day, with the body the app builds (its CreateLeaveRequest: userID, AccountID,
    * fromDate / toDate yyyy-MM-dd, no times, typeID, notes); the app's own words when it refuses
    */
-  async send(leave: LeaveToSend): Promise<{ ok: boolean; message: string }> {
+  async send(leave: LeaveToSend): Promise<CallResult> {
     const day = ymd(leave.day);
     const data = { userID: this.userId(), AccountID: this.accountId(), fromDate: day, toDate: day, fromTime: '', toTime: '',
                    typeID: leave.kind.typeId, notes: leave.note, files: null, AlternateEmployeeIDs: null };
-    return appAnswer(await this.employee.post(ADD_LEAVE_CALL, this.envelope(data)));
+    return resultOf(await this.employee.post(ADD_LEAVE_CALL, this.envelope(data)));
   }
 
   /** the request id goes as text, the way the app sends it */

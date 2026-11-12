@@ -1,13 +1,10 @@
 import { trovaTest as test } from '../../../src/run/trovaTest';
-import { cleanUpMade } from '../../../src/run/cleanUpMade';
-import { runRecords } from '../../../src/run/runRecords';
-import { checkTrue } from '../../../src/report/checks';
-import { adminLeaves, MADE_WEB_LEAVES, webLeaveRecords } from '../../web/leaveRequests/webLeaveOfRun';
+import { webLeaveKind } from '../../../src/api/records/webLeaveKind';
+import { cleanUpRun } from '../../../src/records/cleanUpByIds';
+import { once } from '../../../src/records/recordKind';
+import { adminLeaves } from '../../web/leaveRequests/webLeaveOfRun';
 
-/** deletes by API the leaves the admin added for the run's employee and did not delete (deleted = gone), and checks each */
+/** deletes by id the leaves the admin added for the run's employee and the test did not delete, each read back deleted */
 test('cleanUpWebLeavesProgrammatically', async () => {
-  const made = runRecords.newestFirst(MADE_WEB_LEAVES);
-  test.skip(made.length === 0, 'Every leave this run added was deleted - nothing to delete');
-  const left = await cleanUpMade(made, webLeaveRecords(await adminLeaves()), (id) => runRecords.forget(MADE_WEB_LEAVES, id));
-  checkTrue(`Clean-up · the ${made.length} leave(s) this run added are deleted`, left.length === 0, left.length ? `still there: ${left.join(', ')}` : '');
+  await cleanUpRun([webLeaveKind(once(adminLeaves))]);
 });

@@ -3,6 +3,7 @@ import { fullName } from '../../../src/data/newEmployee';
 import { param } from '../../../src/run/blockParams';
 import { runEmployees } from '../../../src/run/runEmployee';
 import { checkEquals, checkFalse, checkTrue } from '../../../src/report/checks';
+import { runSignInLine } from '../../../src/records/runSignInLine';
 import { refusedPage } from '../../../src/web/pageFacts';
 import { EmployeesPage } from '../../../src/web/pages/EmployeesPage';
 import { RegistrationRequestsPage } from '../../../src/web/pages/RegistrationRequestsPage';
@@ -18,7 +19,7 @@ const APPROVED = 'تمت العملية بنجاح';
 
 /** passes only when the app really opened signed in (the page fixture signs in once per run and proves it) */
 test('logInProgrammatically', async ({ page }) => {
-  checkFalse('Sign-in · the app opened signed in', refusedPage(page.url()));
+  checkFalse(`${runSignInLine()} - the app opened signed in`, refusedPage(page.url()));
 });
 
 test('testVerifyThatTheAdminCanApproveTheRegistrationRequestFromTheWeb', async ({ page }) => {

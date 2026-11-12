@@ -1,6 +1,7 @@
 import { NewEmployee } from '../data/newEmployee';
 import { RunRecords, runRecords } from './runRecords';
 
+/** the user names the clean-up deletes (api/records/recordKeys EMPLOYEE) */
 const MADE = 'made_employees';
 const SET_UP_FAILED = 'employeeSetUpFailed';
 const DETAILS = 'made_employee_details';
@@ -20,9 +21,10 @@ export class RunEmployees {
     if (!this.records.newestFirst(MADE).includes(e.userName)) this.records.keep(MADE, e.userName);
   }
 
-  /** the newest employee this run made and has not deleted yet */
+  /** the newest employee this run made and has not deleted yet (the clean-up drops the user name only) */
   current(): NewEmployee | undefined {
-    return this.details()[0];
+    const made = this.madeUserNames();
+    return this.details().find((d) => made.includes(d.userName));
   }
 
   /** the user names the clean-up deletes, newest first */

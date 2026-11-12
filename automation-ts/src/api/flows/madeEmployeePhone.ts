@@ -1,5 +1,6 @@
 import { NewEmployee } from '../../data/newEmployee';
 import { Json } from '../../run/runDataFile';
+import { signInStep } from '../../records/signInLine';
 import { runSignIns } from '../../signin/runSignIns';
 import { signInKey } from '../../signin/signIns';
 import { PhoneGuestApi } from '../phoneGuestApi';
@@ -35,14 +36,14 @@ async function signIn(e: NewEmployee): Promise<PhoneApi> {
   const earlier = runSignIns.get(runKey(e));
   if (earlier) {
     phone.useSignIn(earlier.token, earlier.browser.localStorage.USER_ID ?? '');
-    console.log(`Signed in as ${e.userName} with this run's sign-in (no sign-in calls)`);
+    signInStep(e.userName, 'api', "this run's sign-in reused (no sign-in calls)");
     return asEmployee(phone, earlier.browser.localStorage.ACCOUNT_ID ?? '');
   }
   const accountId = await new EmployeeSignUpApi(phone).accountId(accountCode());
   const login = await new EmployeeLogInApi(phone).logInWhenApproved(accountId, e.userName, employeePassword(false), 30);
   if (!login.ok) throw new Error(`Set-up: ${e.userName} could not sign in on the phone API: ${login.message}`);
   runSignIns.keep(runKey(e), { token: phone.signInToken(), browser: { localStorage: { USER_ID: phone.id(), ACCOUNT_ID: accountId }, sessionStorage: {}, cookies: {} } });
-  console.log(`Signed in as ${e.userName} on the phone API - the run's one sign-in of this employee`);
+  signInStep(e.userName, 'api', "the run's one phone sign-in of this employee");
   return asEmployee(phone, accountId);
 }
 
