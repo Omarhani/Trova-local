@@ -41,8 +41,8 @@ export async function movementsOn(e: NewEmployee, day?: string): Promise<Movemen
 export async function rowsAround(e: NewEmployee, now = Date.now()): Promise<Row[]> {
   const api = await transactions();
   const userId = await userIdOf(e);
-  const days = await Promise.all(daysAround(now, accountClock.offsetMin()).map((d) => api.dayRows(userId, d)));
-  const rows = days.flat();
+  const rows: Row[] = [];
+  for (const d of daysAround(now, accountClock.offsetMin())) rows.push(...await api.dayRows(userId, d)); // one call at a time (set-up rule)
   attendanceClock.learn(zoneOfRows(rows));
   return rows;
 }
