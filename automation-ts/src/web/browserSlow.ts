@@ -1,3 +1,5 @@
+import { SlowAnswer } from '../report/failureKind';
+
 /** the words a slow browser answers with */
 export const SLOW = 'The browser was slow';
 
@@ -30,6 +32,6 @@ export async function retryOnce<T>(step: () => Promise<T>, say: (line: string) =
     return await step();
   } catch (again) {
     if (!isSlow(again)) throw again;
-    throw new Error(`${SLOW} - retried once, it was still slow`, { cause: again });
+    throw new SlowAnswer(`${SLOW} - retried once, it was still slow`, { cause: again }); // run 973: BLOCKED, never a refused sign-in
   }
 }

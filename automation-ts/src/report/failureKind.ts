@@ -25,8 +25,8 @@ export class SignInProblem extends Error {
 
 /** run 687: the app's answer did not come in time - not a wrong result, not a set-up problem: BLOCKED, never tried again */
 export class SlowAnswer extends Error {
-  constructor(reason: string) {
-    super(reason);
+  constructor(reason: string, options?: { cause?: unknown }) {
+    super(reason, options);
     this.name = 'SlowAnswer';
   }
 }

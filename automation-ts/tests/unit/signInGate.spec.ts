@@ -4,6 +4,7 @@ import { BrowserLook, endedWords } from '../../src/signin/browserSignIn';
 import { SavedSignIn } from '../../src/signin/savedSignIn';
 import { GateDeps, SignInGate } from '../../src/signin/signInGate';
 import { SkipLogin } from '../../src/signin/skipLogin';
+import { retryOnce } from '../../src/web/browserSlow';
 
 /**
  * Omar: ONE sign-in per run. Test 8094 run 624 (suite 56): case 2 reused the run's sign-in, the app refused it (401),
@@ -330,4 +331,14 @@ test('run 864: the app\'s page too slow during the run\'s one sign-in - Not chec
   const err = await gate.open('Admin').catch((e: Error) => e);
   expect(err).toMatchObject({ name: 'SlowAnswer', message: 'The app\'s page did not open within 30 s - not the app\'s answer' });
   expect(f.refusals.get('Admin')).toBeUndefined(); // a slow page is not a refusal: the next case signs in again
+});
+
+test('run 973: the browser still slow after its one retry during the run\'s one sign-in - BLOCKED as slow, the login NOT refused', async () => {
+  const f = new Fakes();
+  f.apiAnswer = await retryOnce(async () => { throw new Error('page.goto: Timeout 30000ms exceeded.'); }, () => undefined)
+    .catch((e: Error) => e);
+  const gate = new SignInGate(f.deps());
+  const err = await gate.open('Admin').catch((e: Error) => e);
+  expect(err).toMatchObject({ name: 'SlowAnswer', message: 'The browser was slow - retried once, it was still slow' });
+  expect(f.refusals.get('Admin')).toBeUndefined(); // the next case and the run's clean-up are not stopped by it
 });
