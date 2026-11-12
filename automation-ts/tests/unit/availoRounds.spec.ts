@@ -80,7 +80,9 @@ const SCENARIOS: Record<string, string[]> = {
 
 for (const [file, cases] of Object.entries(SCENARIOS)) {
   test(`${file}: the cases of its Java scenario, in its order`, () => {
-    expect(blocks(file).filter((b) => b.name.startsWith('Case')).map((b) => b.name)).toEqual(cases);
+    // trap blocks prove a healing rule never turns a real failure into a pass (Omar 2026-11-12); not part of the Java scenario
+    const real = blocks(file).filter((b) => b.name.startsWith('Case') && !b.name.startsWith('Case - Trap'));
+    expect(real.map((b) => b.name)).toEqual(cases);
   });
 
   test(`${file}: signs in once before the first case and cleans up by API last`, () => {
