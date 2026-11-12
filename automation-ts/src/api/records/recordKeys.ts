@@ -15,3 +15,5 @@ export const INVOICE: RecordKey = { key: 'invoiceIds', noun: 'invoice' };
 export const WEB_LEAVE: RecordKey = { key: 'web_leave_keys', noun: 'leave' };
 /** kept by the request's job number (made on the screens) */
 export const REGISTRATION_REQUEST: RecordKey = { key: 'pendingJobNumbers', noun: 'registration request' };
+/** kept as "<user name>|<note>" before Send on the phone (the app answers no id) */
+export const LEAVE_REQUEST: RecordKey = { key: 'leaveRequestNotes', noun: 'leave request' };

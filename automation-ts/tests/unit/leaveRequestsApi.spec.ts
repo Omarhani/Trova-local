@@ -85,5 +85,5 @@ test('trap: a request the app refuses is not ok, with the app\'s own words', asy
   const api = fake({ 'Leaves/Create': [{ Status: false, Message: 'يوجد طلب في نفس اليوم' }] });
   const kind = { categoryId: 2, typeId: 3, nameEn: 'Sick leave', nameAr: '' };
   const said = await new LeaveRequestsApi(api).send({ kind, day: new Date(2026, 11, 1), today: new Date(2026, 10, 11), note: 'n' });
-  expect(said).toEqual({ ok: false, message: 'يوجد طلب في نفس اليوم' });
+  expect(said).toEqual({ ok: false, status: 200, message: 'يوجد طلب في نفس اليوم' }); // status: the set-up's failed line shows it
 });

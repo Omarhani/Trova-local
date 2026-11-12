@@ -2,9 +2,11 @@ import { LeaveRequestsApi, LeaveRow } from '../../../src/api/services/leaveReque
 import { accountClock, offsetOfStamp } from '../../../src/data/appClock';
 import { leaveNoteKey } from '../../../src/data/leaveNotesOfRun';
 import { NewEmployee } from '../../../src/data/newEmployee';
-import { runRecords } from '../../../src/run/runRecords';
+import { LEAVE_REQUEST } from '../../../src/api/records/recordKeys';
+import { madeChecked } from '../../../src/records/checkedSetUp';
+import { madeRecords } from '../../../src/records/madeRecords';
 import type { LeaveToSend } from '../../../src/phone/screens/LeaveRequestScreen';
-import { leavePlan, MADE_NOTES, sentRow } from './leaveOnPhone';
+import { leavePlan, sentRow } from './leaveOnPhone';
 
 /**
  * Set-up by API: the employee sends its own leave request the way the app does (Leaves add call), on the next free
@@ -13,14 +15,17 @@ import { leavePlan, MADE_NOTES, sentRow } from './leaveOnPhone';
  */
 export async function sentByApi(leaves: LeaveRequestsApi, e: NewEmployee): Promise<{ row: LeaveRow; toSend: LeaveToSend; sentAt: number }> {
   const { toSend } = await leavePlan(leaves);
-  runRecords.keep(MADE_NOTES, leaveNoteKey(e.userName, toSend.note)); // from here the request may exist - the clean-up looks for it
+  const key = leaveNoteKey(e.userName, toSend.note);
+  madeRecords.keep(LEAVE_REQUEST, key); // from here the request may exist - the clean-up looks for it
   const sentAt = Date.now();
   const said = await leaves.send(toSend);
-  if (!said.ok) throw new Error(`Set-up: the app refused the leave request "${toSend.note}": ${said.message}`);
-  const row = await sentRow(leaves, toSend.note);
-  if (!row) throw new Error(`Set-up: the request "${toSend.note}" is not in the employee's own list`);
-  accountClock.learn(offsetOfStamp(row.CreatedDate, sentAt));
-  return { row, toSend, sentAt };
+  const row = said.ok ? await sentRow(leaves, toSend.note) : undefined;
+  // a checked step: the app takes it AND the employee's list gives its id - "Made leave request id <id>"
+  madeChecked(LEAVE_REQUEST, { ...said, ok: row !== undefined, id: row ? String(row.ID) : '',
+    message: said.ok ? `the request "${toSend.note}" is not in the employee's own list` : said.message }, key);
+  const made = row as LeaveRow; // madeChecked has failed the step when there is no row
+  accountClock.learn(offsetOfStamp(made.CreatedDate, sentAt));
+  return { row: made, toSend, sentAt };
 }
 
 /** the request is no longer in the employee's own list, looked for up to seconds (the list may lag the delete) */

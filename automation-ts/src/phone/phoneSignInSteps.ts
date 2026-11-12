@@ -49,3 +49,8 @@ export function nextSignInStep(s: SignInScreen, env: string, done: Set<string>):
   if (s.next) return { kind: 'next' };
   return { kind: 'wait' };
 }
+
+/** what the sign-in line adds after "Sign in as <user> (on the app's screens)": nothing when it typed and logged in */
+export function appSignInExtra(done: Set<string>): string {
+  return done.has('login') ? '' : 'the app was already signed in as this user';
+}

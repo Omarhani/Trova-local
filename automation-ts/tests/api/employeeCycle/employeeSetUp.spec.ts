@@ -23,7 +23,7 @@ test('approvedEmployeeProgrammatically', async () => {
     throw err;
   });
   const row = await (await adminServices()).employees.find(e.userName);
-  checkEquals(`Set-up · ${e.userName} is active in Employees`, String(row?.UserStatesID), ACTIVE);
+  checkEquals(`Set-up · employee id ${row?.ID ?? 'none'} (${e.userName}) is active in Employees`, String(row?.UserStatesID), ACTIVE);
 });
 
 /** deletes by id every employee this run made - an employee or a still waiting request - each read back gone */
