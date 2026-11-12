@@ -11,6 +11,7 @@ import { locate } from './anyOf';
 import { doneOrMessage } from './browserMessages';
 import { ownBoxReady, passwordBox } from './ownBox';
 import { stepGuard } from './signin/signedOutStep';
+import { actionStarts, messageAfterAction } from './shownMessages';
 
 /** the least time the action itself gets once its element showed (it was found: only its own readiness is left) */
 export const ACTION_FLOOR_MS = 5_000;
@@ -28,6 +29,7 @@ export class WebActions {
     const found = this.at(selector);
     await this.guarded(async () => {
       const left = await this.marked(found, 'click', seconds);
+      actionStarts(this.page); // the message this click brings is one shown from now on (run 994)
       await doneOrMessage(this.page, found.click({ timeout: left }));
     });
     this.picture();
@@ -71,6 +73,7 @@ export class WebActions {
     await this.guarded(async () => {
       await found.waitFor({ state: 'attached', timeout: seconds * 1000 });
       await this.markFound(found, 'click');
+      actionStarts(this.page);
       await found.evaluate((e) => ((e.closest('button') ?? e) as HTMLElement).click());
     });
     this.picture();
@@ -124,6 +127,26 @@ export class WebActions {
   protected async messageOf(selector: string, seconds: number): Promise<string> {
     if (!(await this.isShownWithin(selector, seconds))) return '';
     return withoutClose(await this.at(selector).innerText().catch(() => ''));
+  }
+
+  /**
+   * the toast check (run 994): the message expected among those the page showed since the last click - kept as they
+   * show, so one that came and went counts - or in the box now; waited up to seconds. Else the last one seen, "" when none
+   */
+  protected async toastAfterAction(selector: string, expected: string, seconds: number): Promise<string> {
+    const want = withoutClose(expected);
+    return messageAfterAction(this.page, (t) => t === want, seconds, () => this.firstText(selector));
+  }
+
+  /** the first message the page showed since the last click that isIt (any, by default) - as toastAfterAction */
+  protected async firstToastAfterAction(selector: string, seconds: number, isIt: (t: string) => boolean = (t) => t !== ''): Promise<string> {
+    return messageAfterAction(this.page, isIt, seconds, () => this.firstText(selector));
+  }
+
+  /** the first match's text now ("" when none is there) - never waits */
+  private async firstText(selector: string): Promise<string> {
+    const found = this.all(selector).first();
+    return (await found.count()) > 0 ? withoutClose(await found.innerText({ timeout: 1000 }).catch(() => '')) : '';
   }
 
   /** the element's message once it reads expected (waits up to seconds); the last message seen, "" when none showed */

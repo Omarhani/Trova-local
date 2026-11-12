@@ -3,14 +3,19 @@ import { AppApi } from '../../../src/api/appApi';
 import { AdminLeavesApi } from '../../../src/api/services/adminLeavesApi';
 import { fullName, NewEmployee } from '../../../src/data/newEmployee';
 import { dayPlus } from '../../../src/data/overtimeDays';
+import { clearLeftovers, leaveToDelete, webLeaveKey } from '../../../src/data/webLeaveLeftovers';
 import { param } from '../../../src/run/blockParams';
-import { RecordApi } from '../../../src/run/cleanUpMade';
 import { runRecords } from '../../../src/run/runRecords';
 import type { WebLeave } from '../../../src/web/pages/LeavesPage';
 import { userIdOf } from '../../api/attendance/movementsOfRun';
 
-/** run records kind: the ids of the leaves the admin added for the run's employee (the clean-up deletes those left) */
-export const MADE_WEB_LEAVES = 'web_leave_ids';
+export { webLeaveRecords } from '../../../src/data/webLeaveLeftovers';
+
+/** run records kind: employee + note of each leave the admin added for the run's employee (the clean-up deletes those left) */
+export const MADE_WEB_LEAVES = 'web_leave_keys';
+
+/** every leave this suite makes has a note that starts so - a leftover of this kind on the same days is the run's own */
+export const WEB_LEAVE_KIND = 'Trova web leave';
 
 /** "deleted" on the requests list and in its details - a deleted request stays in the list with this status */
 export const LEAVE_DELETED = 'محذوف';
@@ -27,7 +32,17 @@ export function webLeaveFor(e: NewEmployee): WebLeave {
     subType: param('leave_sub_type', 'سنوية'),
     from: dayPlus(Number(param('leave_from_days_ahead', '1'))),
     to: dayPlus(Number(param('leave_to_days_ahead', '2'))),
-    notes: param('leave_note', 'Trova web leave {run}'),
+    notes: param('leave_note', `${WEB_LEAVE_KIND} {run}`),
+  };
+}
+
+/** run 994: the delete case's own leave (when the run has none) sits on its own days and note - never the add case's */
+export function ownDeleteLeave(e: NewEmployee): WebLeave {
+  return {
+    ...webLeaveFor(e),
+    from: dayPlus(Number(param('delete_leave_from_days_ahead', '4'))),
+    to: dayPlus(Number(param('delete_leave_to_days_ahead', '5'))),
+    notes: param('delete_leave_note', `${WEB_LEAVE_KIND} (delete) {run}`),
   };
 }
 
@@ -35,19 +50,15 @@ export async function adminLeaves(): Promise<AdminLeavesApi> {
   return new AdminLeavesApi(await AppApi.signedInAs(adminLogin(), 'web'));
 }
 
-/** the leave this run added for the employee and did not delete; else one added now by API (the delete case run alone) */
-export async function webLeaveOfRun(e: NewEmployee): Promise<string> {
-  const made = runRecords.newestFirst(MADE_WEB_LEAVES)[0];
-  if (made) return made;
-  const id = await (await adminLeaves()).add({ ...webLeaveFor(e), userId: await userIdOf(e) });
-  runRecords.keep(MADE_WEB_LEAVES, id);
-  return id;
+/** the add case's set-up: the run's own leftover on its days deleted by API; gives back the key to keep before Save */
+export async function readyToAdd(e: NewEmployee, leave: WebLeave): Promise<string> {
+  const userId = await userIdOf(e);
+  await clearLeftovers(await adminLeaves(), userId, leave, WEB_LEAVE_KIND);
+  return webLeaveKey(userId, leave.notes);
 }
 
-/** the clean-up's view: a leave is still there while its status is not "deleted"; deleted the way the list's trash does */
-export function webLeaveRecords(api: AdminLeavesApi): RecordApi {
-  return {
-    idOf: async (id) => ((await api.statusOf(id)) === LEAVE_DELETED ? undefined : id),
-    delete: async (id) => api.delete(id),
-  };
+/** the leave this run added for the employee and did not delete; else its own one added now by API (the case run alone) */
+export async function webLeaveOfRun(e: NewEmployee): Promise<{ id: string; key: string }> {
+  return leaveToDelete(await adminLeaves(), await userIdOf(e), runRecords.newestFirst(MADE_WEB_LEAVES), ownDeleteLeave(e),
+    WEB_LEAVE_KIND, (key) => runRecords.keep(MADE_WEB_LEAVES, key));
 }

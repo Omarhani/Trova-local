@@ -1,6 +1,7 @@
 import type { ConsoleMessage, Page } from '@playwright/test';
 import { emit } from '../report/liveEvents';
 import { currentStep } from '../report/stepNumbers';
+import { messageShown } from './shownMessages';
 import { TOAST } from './toastWatch';
 
 /** what the page says on its console for each message it showed - read here, never shown as a console line */
@@ -27,7 +28,10 @@ export async function watchPageMessages(page: Page, tell: (m: PageMessage) => vo
   watched.add(page);
   page.on('console', (m: ConsoleMessage) => {
     const text = pageMessageOf(m.text());
-    if (text !== undefined) tell({ text, step: step(), at: Date.now() });
+    if (text === undefined) return;
+    const at = Date.now();
+    messageShown(page, text, at); // the toast checks read it from here (run 994)
+    tell({ text, step: step(), at });
   });
   const args = { selector: TOAST, mark: MARK, sameMs: SAME_MS };
   await page.addInitScript(sayMessages, args); // every page from its start

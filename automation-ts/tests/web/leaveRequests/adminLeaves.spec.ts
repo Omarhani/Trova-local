@@ -3,7 +3,7 @@ import { runRecords } from '../../../src/run/runRecords';
 import { checkEquals } from '../../../src/report/checks';
 import { LeavesPage } from '../../../src/web/pages/LeavesPage';
 import { webTest as test } from '../../../src/web/webTest';
-import { adminLeaves, LEAVE_DELETED, MADE_WEB_LEAVES, webLeaveFor, webLeaveOfRun } from './webLeaveOfRun';
+import { adminLeaves, LEAVE_DELETED, MADE_WEB_LEAVES, readyToAdd, webLeaveFor, webLeaveOfRun } from './webLeaveOfRun';
 
 /**
  * A leave the admin adds on the web for the run's employee, and its delete - the TS twins of
@@ -18,13 +18,14 @@ test('testVerifyThatTheAdminCanAddALeaveForTheEmployeeFromTheWeb', async ({ page
   const e = await approvedEmployeeOfRun();
   const leave = webLeaveFor(e);
   const type = `${leave.type}- ${leave.subType}`;
+  const key = await readyToAdd(e, leave); // the run's own leftover on these days deleted first (run 994)
   const leaves = new LeavesPage(page);
   await leaves.openLeaves();
+  runRecords.keep(MADE_WEB_LEAVES, key); // from Save on the leave may exist - the clean-up deletes it if the delete case does not
   await leaves.addLeave(leave);
 
   checkEquals('Add leave · toast', await leaves.toastShows(ADDED), ADDED);
   const id = await leaves.newestRequestIdOf(leave.fullName);
-  runRecords.keep(MADE_WEB_LEAVES, id); // the clean-up deletes it if the delete case does not
   const row = await leaves.requestRow(id);
   checkEquals('Requests list · employee', row.employee, leave.fullName);
   checkEquals('Requests list · status', row.status, ACCEPTED);
@@ -42,7 +43,7 @@ test('testVerifyThatTheAdminCanAddALeaveForTheEmployeeFromTheWeb', async ({ page
 
 test('testVerifyThatTheAdminCanDeleteTheEmployeesLeaveFromTheWeb', async ({ page }) => {
   const e = await approvedEmployeeOfRun();
-  const id = await webLeaveOfRun(e);
+  const { id, key } = await webLeaveOfRun(e);
   const leaves = new LeavesPage(page);
   await leaves.openLeaves();
   await leaves.deleteRequest(id);
@@ -50,5 +51,5 @@ test('testVerifyThatTheAdminCanDeleteTheEmployeesLeaveFromTheWeb', async ({ page
   checkEquals('Delete leave · toast', await leaves.toastShows(DONE), DONE);
   checkEquals('Requests list · status after the delete (the row stays)', await leaves.statusBecomes(id, LEAVE_DELETED), LEAVE_DELETED);
   checkEquals('API · the leave is deleted', await (await adminLeaves()).statusOf(id), LEAVE_DELETED);
-  runRecords.forget(MADE_WEB_LEAVES, id);
+  runRecords.forget(MADE_WEB_LEAVES, key);
 });

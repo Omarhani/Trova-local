@@ -147,9 +147,9 @@ export class WorkPlansPage extends WebActions {
     await this.click(this.dialogSaveButton, 10, 'Save');
   }
 
-  /** the toast text once it shows (the expected one is waited for); "" when none came */
-  async toastShows(expected: string): Promise<string> {
-    return this.textBecomes(this.toast, expected, 15);
+  /** the toast text once it shows since the click (the expected one is waited for); "" when none came */
+  async toastShows(expected: string, seconds = 15): Promise<string> {
+    return this.toastAfterAction(this.toast, expected, seconds);
   }
 
   /** waits until the toast has gone, so the next one is not confused with it */

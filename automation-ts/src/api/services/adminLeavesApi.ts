@@ -7,6 +7,7 @@ import { listOf, Row } from '../rows';
 
 /** the requests list's status words by StatusId (1 approved, 2 pending, 3 rejected, 4 deleted) */
 const STATUS_WORDS: Readonly<Record<number, string>> = { 1: 'مقبول', 2: 'تحت الاجراء', 3: 'مرفوض', 4: 'محذوف' };
+const DELETED = STATUS_WORDS[4];
 
 /** the list's words for a StatusId; the number itself when the list has no word for it */
 export function statusWord(statusId: unknown): string {
@@ -36,9 +37,20 @@ export class AdminLeavesApi {
                    FromDate: leave.from, FromTime: '', ToDate: leave.to, ToTime: '', Notes: leave.notes, AlternateEmployeeID: '' };
     const said = appAnswer(await this.admin.post(this.path('Leaves/AddLeave'), { data }));
     if (!said.ok) throw new Error(`Set-up: the app refused the leave "${leave.notes}": ${said.message}`);
-    const row = (await this.list(leave.userId)).find((r) => String(r.Notes ?? '').trim() === leave.notes.trim());
-    if (!row) throw new Error(`Set-up: the leave "${leave.notes}" is not in the requests list after the add`);
-    return String(row.ID);
+    const id = await this.idByNote(leave.userId, leave.notes);
+    if (id === undefined) throw new Error(`Set-up: the leave "${leave.notes}" is not in the requests list after the add`);
+    return id;
+  }
+
+  /** the employee's request with this note that is not deleted; undefined when there is none */
+  async idByNote(userId: string, note: string): Promise<string | undefined> {
+    const row = (await this.rowsOf(userId)).find((r) => String(r.Notes ?? '').trim() === note.trim() && statusWord(r.StatusId) !== DELETED);
+    return row ? String(row.ID) : undefined;
+  }
+
+  /** the employee's requests of any status (a month back to three months ahead) */
+  async rowsOf(userId: string): Promise<Row[]> {
+    return this.list(userId);
   }
 
   /** the request's status as the list words it ("مقبول", "محذوف" ...); '' when the list has no such request */

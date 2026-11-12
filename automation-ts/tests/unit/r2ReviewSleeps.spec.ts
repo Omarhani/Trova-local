@@ -23,6 +23,8 @@ const KNOWN: Record<string, number> = {
   'src/core/phoneTyping.ts': 1, 'tests/mobile/leaveRequest/leaveOnPhone.ts': 1,
   // merged from dev (cases pair, 2026-11-11): each a look inside a loop that ends on its condition or its time limit
   'tests/web/leaveRequests/requestOfTheEmployee.ts': 2, 'tests/mobile/leaveRequest/sentByApi.ts': 1, 'src/web/pages/TransactionsPage.ts': 1,
+  // run 994: the toast checks' look (was textBecomes' look) - inside a loop that ends on the message or its time limit
+  'src/web/shownMessages.ts': 1,
 };
 
 /** the files round 2 added: their waits are new, so none of them sleeps a fixed time */

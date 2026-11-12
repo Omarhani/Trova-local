@@ -78,8 +78,9 @@ export class InvoicesPage extends WebActions {
   }
 
   /** "رقم 2026056 بمبلغ 150.00 EGP" - the message after saving */
+  /** the "invoice number ... amount" message shown since the click (Save), waited up to 15 s; "" when none came */
   async createdToastText(): Promise<string> {
-    return this.messageOf(this.createdToast, 15);
+    return this.firstToastAfterAction(this.createdToast, 15, (t) => t.startsWith('رقم ') && t.includes('بمبلغ'));
   }
 
   async formClosed(): Promise<boolean> {
