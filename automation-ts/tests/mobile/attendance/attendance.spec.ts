@@ -42,7 +42,7 @@ async function signInOnScreen(phone: Phone, login: string, server: string): Prom
 
 /** set-up / clean-up: only when home offers Check-Out - check out and see home back on Check-In */
 async function checkOut(home: HomeScreen, attendance: AttendanceScreen, part: string): Promise<void> {
-  if (!(await home.offersCheckOut(10))) return;
+  if (!(await home.offersCheckOut())) return;
   await home.openCheckOut();
   checkEquals(`${part} · check out saved`, await attendance.submit(), 'success');
   await attendance.backToHomeIfShown();

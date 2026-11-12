@@ -25,7 +25,7 @@ test('testVerifyThatTheEmployeeCanCheckOutFromTheApp', async ({ phone }) => {
   const home = await homeAs(phone, e);
   const attendance = new AttendanceScreen(phone);
   // set-up: the case's own check in when the run left none open (a case run alone)
-  if (!(await home.offersCheckOut(10))) await checkInOnTheApp(home, attendance, 'Set-up');
+  if (!(await home.offersCheckOut())) await checkInOnTheApp(home, attendance, 'Set-up');
   const before = timesOf(await movementsOn(e), 'check out').length;
 
   await checkOutOnTheApp(home, attendance, 'Check out');
@@ -37,7 +37,7 @@ test('checkedInAndOutOnTheApp', async ({ phone }) => {
   const e = await approvedEmployeeOfRun();
   const home = await homeAs(phone, e);
   const attendance = new AttendanceScreen(phone);
-  if (!(await home.offersCheckOut(10))) await checkInOnTheApp(home, attendance, 'Set-up check in');
+  if (!(await home.offersCheckOut())) await checkInOnTheApp(home, attendance, 'Set-up check in');
   await checkOutOnTheApp(home, attendance, 'Set-up check out');
   const movements = await movementsOn(e);
   checkEquals('Set-up · API: the app check in and check out of today are there',
