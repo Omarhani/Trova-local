@@ -25,6 +25,8 @@ const KNOWN: Record<string, number> = {
   'tests/web/leaveRequests/requestOfTheEmployee.ts': 2, 'tests/mobile/leaveRequest/sentByApi.ts': 1, 'src/web/pages/TransactionsPage.ts': 1,
   // run 994: the toast checks' look (was textBecomes' look) - inside a loop that ends on the message or its time limit
   'src/web/shownMessages.ts': 1,
+  // runs 972/973: the look while a closed leftover browser lets go of the kept folder - ends on the folder or its time limit
+  'src/web/cacheHolder.ts': 1,
 };
 
 /** the files round 2 added: their waits are new, so none of them sleeps a fixed time */
