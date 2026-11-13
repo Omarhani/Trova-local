@@ -36,14 +36,14 @@ export interface GateDeps {
   renewDue: (saved: SavedSignIn) => string | null;
   now: () => number;
   say: (line: string) => void;
+  /** Omar 2026-11-13: the app was seen signed in as login - the run's tick, never before that */
+  proved: (login: string) => void;
 }
 
-const CHECK = "check the app's sign-in on the server";
-
 /** run 687: the refusal with expected / seen in plain words ("seen: the sign-in page") */
-function refusedWords(which: string, login: string, why: string): string {
+function refusedWords(login: string, why: string): string {
   const seen = /went to its sign-in page/i.test(why) ? 'the sign-in page' : why;
-  return `The app refused ${which} of ${login} - expected: the app signed in as ${login}, seen: ${seen} - ${CHECK}`;
+  return `Expected: the app signed in as ${login} / Actual: ${seen}`; // Omar 2026-11-13: one short Expected / Actual line
 }
 
 /**
@@ -71,8 +71,9 @@ export class SignInGate {
     }
     if (this.d.held() !== login) await this.d.put(saved);
     const why = await this.d.prove();
-    if (why) this.refuse(login, saved.browser ? endedWords(login) : refusedWords("Trova's sign-in", login, why));
+    if (why) this.refuse(login, saved.browser ? endedWords(login) : refusedWords(login, why));
     this.d.hold(login);
+    this.d.proved(login);
     this.d.say(`Opened signed in as ${login} with this run's saved sign-in (no sign-in calls)`);
   }
 
@@ -102,10 +103,10 @@ export class SignInGate {
     }
     // hybrid: the run's API sign-in (case 1's, or made now) is the saved one every case uses
     // run 679: no saved browser file was used here - it is Trova's own sign-in
-    const which = fresh ? "Trova's fresh sign-in" : this.d.mode === 'ui' ? 'the sign-in' : "Trova's sign-in";
-    if (why) this.refuse(login, refusedWords(which, login, why));
+    if (why) this.refuse(login, refusedWords(login, why));
     this.d.book.save(login, { ...(await this.d.capture()), madeAt: this.d.now(), fresh });
     this.d.hold(login);
+    this.d.proved(login);
     this.d.say(fresh ? `Signed in again as ${login} - saved for the rest of the run`
       : `Signed in as ${login} once for this run (${this.d.mode === 'ui' ? 'on the sign-in page' : "by Trova's own API calls"}) - every later case reuses it`);
   }
@@ -119,6 +120,7 @@ export class SignInGate {
     if (await this.d.prove()) this.refuse(login, endedWords(login));
     this.d.book.save(login, { ...(await this.d.capture()), madeAt: this.d.now(), fresh: 0, browser: { endsAt: look.signIn.endsAt } });
     this.d.hold(login);
+    this.d.proved(login);
     this.d.say(usingLine(login, look.signIn));
     return true;
   }

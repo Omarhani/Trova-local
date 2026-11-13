@@ -28,6 +28,8 @@ class Fakes {
   /** the sign-in the tester saved in a real browser, per login (none when not set) */
   browserLooks = new Map<string, BrowserLook>();
   browserPuts: string[] = [];
+  /** the logins the gate said were proved signed in (the run's tick) */
+  provedLines: string[] = [];
   ends = new Map<string, number>(); // login -> ms left of the saved sign-in
   now = 10 * HOUR;
 
@@ -53,6 +55,7 @@ class Fakes {
       capture: async () => ({ origin: 'https://app.x', storage: { cookies: [], origins: [{ origin: 'https://app.x', localStorage: [{ name: 'TOKEN', value: SECRET }] }] }, sessionStorage: {} }),
       put: async (s) => { this.puts.push(s.origin); },
       prove: async () => { this.proves += 1; return this.answer; },
+      proved: (login) => { this.provedLines.push(login); },
       renewDue: (s) => {
         const left = this.ends.get(this.loginOf(s)) ?? HOUR;
         return left < 5 * 60_000 ? `in ${Math.trunc(left / 60_000)} min` : null;
@@ -85,12 +88,12 @@ test('(b) a refused saved sign-in fails that case with the plain reason and skip
   await gate.open('Admin');
   f.answer = 'its calls answered 401';
   await expect(gate.open('Admin')).rejects.toThrow(
-    "The app refused Trova's sign-in of Admin - expected: the app signed in as Admin, seen: its calls answered 401 - check the app's sign-in on the server");
+    "Expected: the app signed in as Admin / Actual: its calls answered 401");
   const started = Date.now();
   for (let i = 0; i < 3; i++) {
     const e = await gate.open('Admin').catch((x: unknown) => x);
     expect(e).toBeInstanceOf(SkipLogin);
-    expect((e as Error).message).toContain("The app refused Trova's sign-in of Admin");
+    expect((e as Error).message).toContain('Expected: the app signed in as Admin / Actual:');
   }
   expect(Date.now() - started).toBeLessThan(1000);
   expect(f.api).toHaveLength(1); // no second sign-in
@@ -106,7 +109,7 @@ test('(c) hybrid never goes to the sign-in page: not on a refusal, not on a refu
   f.apiAnswer = null;
   await gate.open('Sara');
   f.answer = 'it went to its sign-in page';
-  await expect(gate.open('Sara')).rejects.toThrow("The app refused Trova's sign-in of Sara"); // run 679: no saved browser file was used
+  await expect(gate.open('Sara')).rejects.toThrow('Expected: the app signed in as Sara / Actual:'); // run 679: no saved browser file was used
   await expect(gate.again('Sara')).rejects.toBeInstanceOf(SkipLogin);
   expect(f.screen).toEqual([]);
 });
@@ -141,7 +144,7 @@ test('the run\'s API sign-in (made by case 1) refused when the first web case op
   const gate = new SignInGate(f.deps());
   f.apiAnswer = 'its calls answered 401';
   await expect(gate.open('Admin')).rejects.toThrow(
-    "The app refused Trova's sign-in of Admin - expected: the app signed in as Admin, seen: its calls answered 401 - check the app's sign-in on the server");
+    "Expected: the app signed in as Admin / Actual: its calls answered 401");
   await expect(gate.open('Admin')).rejects.toBeInstanceOf(SkipLogin);
 });
 
@@ -319,7 +322,7 @@ test('run 687: the first web case finds the sign-in page - BLOCKED with expected
   const gate = new SignInGate(f.deps());
   const err = await gate.open('Admin').catch((e: Error) => e);
   expect(err).toMatchObject({ name: 'SignInProblem' });
-  expect(String((err as Error).message)).toContain('expected: the app signed in as Admin, seen: the sign-in page');
+  expect(String((err as Error).message)).toContain('Expected: the app signed in as Admin / Actual: the sign-in page');
 });
 
 test('run 864: the app\'s page too slow during the run\'s one sign-in - Not checked in plain words, the login NOT refused', async () => {
@@ -341,4 +344,17 @@ test('run 973: the browser still slow after its one retry during the run\'s one 
   const err = await gate.open('Admin').catch((e: Error) => e);
   expect(err).toMatchObject({ name: 'SlowAnswer', message: 'The browser was slow - retried once, it was still slow' });
   expect(f.refusals.get('Admin')).toBeUndefined(); // the next case and the run's clean-up are not stopped by it
+});
+
+// Omar 2026-11-13 (runs 1033-1037): the sign-in tick turned green before the app was seen signed in - the tick comes only
+// after the app opened signed in; a refused sign-in gets no tick, only "Expected / Actual"
+test('the signed-in tick comes only after the app is proved signed in, never for a refused one', async () => {
+  const f = new Fakes();
+  const gate = new SignInGate(f.deps());
+  await gate.open('Admin');
+  expect(f.provedLines).toEqual(['Admin']);
+  const g = new Fakes();
+  g.apiAnswer = 'it went to its sign-in page';
+  await expect(new SignInGate(g.deps()).open('Sara')).rejects.toThrow('Expected: the app signed in as Sara / Actual: the sign-in page');
+  expect(g.provedLines).toEqual([]);
 });

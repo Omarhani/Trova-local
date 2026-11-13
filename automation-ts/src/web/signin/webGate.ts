@@ -10,6 +10,7 @@ import { putState } from './browserPut';
 import { heldLogin, holdLogin } from './heldLogin';
 import { captureSaved, putSaved } from './savedState';
 import { screenSignInto } from './screenSignInto';
+import { checkTrue } from '../../report/checks';
 
 /** the run's sign-in gate on the run's one tab, in the suite's mode (hybrid: the app's API; ui: the sign-in page) */
 export function webGate(page: Page, web: string): SignInGate {
@@ -28,5 +29,6 @@ export function webGate(page: Page, web: string): SignInGate {
     renewDue: (saved) => renewDue(saved),
     now: () => Date.now(),
     say: (line) => console.log(line),
+    proved: (login) => checkTrue(`Opened the app signed in as ${login}`, true), // Omar 2026-11-13: the tick only once seen
   });
 }
