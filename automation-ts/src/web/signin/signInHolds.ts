@@ -3,7 +3,7 @@ import { wantedCall } from '../../report/networkEvents';
 import { refusedPage } from '../pageFacts';
 import { onPage, STATE } from './signInScripts';
 
-/** how long a freshly put sign-in is watched: at least MIN, done once the app's calls are QUIET, never past MAX */
+/** how long a freshly put sign-in is watched: at least MIN, done once no call of the app started or answered for QUIET, never past MAX */
 export const HOLD = { minMs: 1500, quietMs: 700, maxMs: 5000, lookMs: 150 };
 
 type State = { pw?: boolean; login?: boolean };
@@ -26,13 +26,14 @@ export interface HoldWatch {
  * page or a no-right page (Test 8094 run 609: the menu showed, the first call was refused, the app went to its sign-in
  * page 2.5 s later and the test's first click landed there). Watched from the moment the app is opened, so its calls
  * while it loads count and the time it took to load counts toward the least watch (run 615: 1.5 s more after it had
- * settled). Only after a new state is put in - a held sign-in pays nothing.
+ * settled). Only after a new state is put in - a held sign-in pays nothing. A call that stays open (the app's account
+ * lookup on opening, 3-7 s in run 611) does not hold it: quiet = nothing started or answered; a refusal that comes later
+ * is still caught by the step guard (signedOutStep), so no step passes signed out.
  */
 export function watchHold(page: Page, hold = HOLD): HoldWatch {
-  const busy = new Set<Request>();
-  const calls = { busy, last: Date.now() };
-  const start = (r: Request): void => { if (appCall(r)) { busy.add(r); calls.last = Date.now(); } };
-  const end = (r: Request): void => { if (busy.delete(r)) calls.last = Date.now(); };
+  const calls = { last: Date.now() };
+  const start = (r: Request): void => { if (appCall(r)) calls.last = Date.now(); };
+  const end = start;
   page.on('request', start);
   page.on('requestfinished', end);
   page.on('requestfailed', end);
@@ -52,13 +53,13 @@ export function watchHold(page: Page, hold = HOLD): HoldWatch {
 }
 
 /** began = the app was opened; at most maxMs from now; done at least minMs after began, once calls were quiet quietMs */
-async function until(page: Page, hold: typeof HOLD, began: number, calls: { busy: Set<Request>; last: number }): Promise<boolean> {
+async function until(page: Page, hold: typeof HOLD, began: number, calls: { last: number }): Promise<boolean> {
   const looking = Date.now();
   for (;;) {
     if (await signedOutNow(page)) return false;
     const now = Date.now();
     if (now - looking >= hold.maxMs) return true;
-    if (now - began >= hold.minMs && calls.busy.size === 0 && now - calls.last >= hold.quietMs) return !(await signedOutNow(page));
+    if (now - began >= hold.minMs && now - calls.last >= hold.quietMs) return !(await signedOutNow(page));
     await new Promise((r) => setTimeout(r, hold.lookMs));
   }
 }
