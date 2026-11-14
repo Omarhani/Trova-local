@@ -13,7 +13,7 @@ import { signInAs } from '../employeeAccount/employeeOnPhone';
 /**
  * Self-healing proof on the phone (Omar 2026-11-11): each case breaks ONE thing on purpose and must end as designed -
  * 7 our renamed element: AI help gets past, a treatment waits; 8 Android's location question in the way: PASSED (answered
- * as a known step); 9 the phone connection lost mid-case: NOT CHECKED (Blocked); 10 TRAP the phone and the case disagree on a value:
+ * as a known step); 9 the phone connection lost mid-case: COULD NOT FINISH (Blocked); 10 TRAP the phone and the case disagree on a value:
  * FAILED, never healed. The run's employee (made by API) signs in once; nothing is saved in the app.
  */
 async function signedIn(phone: Phone): Promise<NewEmployee> {

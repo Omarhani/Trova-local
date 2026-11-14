@@ -47,7 +47,7 @@ test("the refused sign-in cases never use the run's one sign-in (a refusal would
 });
 
 // run 860: the wrong password case failed "no message" with no proof the app ever answered the sign-in
-test('the app never answered the sign-in: not checked (slow), never a failure', () => {
+test('the app never answered the sign-in: could not finish (slow), never a failure', () => {
   expect(() => refusalAnswered(undefined, 15)).toThrow(SlowAnswer);
   expect(() => refusalAnswered(undefined, 15)).toThrow("The app did not answer the sign-in within 15 s - not the app's answer");
 });

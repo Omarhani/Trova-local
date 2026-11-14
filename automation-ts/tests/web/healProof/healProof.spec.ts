@@ -6,7 +6,7 @@ import { HealProofPage } from '../../../src/web/pages/HealProofPage';
 /**
  * Self-healing proof round (Omar 2026-11-11): each case breaks ONE thing on purpose and must end as designed -
  * 1 our renamed locator: AI help gets past, a treatment WAITS (Blocked "needs a look" until approved); 2 a pop-up in the
- * way: the AI closes it, PASSED; 3 the network cut: NOT CHECKED (Blocked, the environment); 4 the app's plan list
+ * way: the AI closes it, PASSED; 3 the network cut: COULD NOT FINISH (Blocked, the environment); 4 the app's plan list
  * answering an error: FAILED (a real app bug). Proof C (healProofChecks.spec.ts) has the missed toast and the trap.
  * The work plans page only - nothing is saved in the app; every cut call is given back after its case.
  */

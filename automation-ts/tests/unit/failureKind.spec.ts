@@ -54,7 +54,7 @@ test('run 717: the phone dropped off its cable mid-case - Appium could not reach
     .toMatch(/^The phone was disconnected during the case/);
 });
 
-test('run 821: the app\'s page did not load in time is not checked (slow), never a failure with the tool\'s words', () => {
+test('run 821: the app\'s page did not load in time could not finish (slow), never a failure with the tool\'s words', () => {
   const r = kindOf('TimeoutError: page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to "https://availo-testingnewui.t2.sa/", waiting until "load"');
   expect(r.kind).toBe('slow');
   expect(r.reason).toBe('The app\'s page did not open within 30 s - not the app\'s answer');

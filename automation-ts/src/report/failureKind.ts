@@ -75,7 +75,7 @@ export function kindOf(error: string): { kind: Kind; reason: string } {
   if (/^Not tested - needs /.test(said)) return { kind: 'data', reason: said };
   const first = said.split('\n')[0];
   if (first.includes('✗')) return { kind: 'failed', reason: text }; // a check saw a wrong value: never a set-up problem
-  const load = PAGE_LOAD.exec(first); // run 821: the app's page did not load in time - not checked, never the tool's words
+  const load = PAGE_LOAD.exec(first); // run 821: the app's page did not load in time - the test could not finish, never the tool's words
   if (load) return { kind: 'slow', reason: `The app's page did not open within ${Math.round(Number(load[1]) / 1000)} s - not the app's answer` };
   return setUpSaid(text) ? { kind: 'setup', reason: plainSetUp(text, said) } : { kind: 'failed', reason: text };
 }

@@ -11,7 +11,7 @@ const SERVER_ERROR = 500;
 
 /**
  * Test 8094 runs 865 / 866 (5 web runs at once, the app slow): a page of the app that did not open in time is the
- * environment - Not checked (SlowAnswer, BLOCKED); only an error the app showed or answered on the way is the app's
+ * environment - the test could not finish (SlowAnswer, BLOCKED); only an error the app showed or answered on the way is the app's
  * answer - FAILED as Expected / Actual.
  */
 export function notOpened(what: string, seconds: number, seen: OpenSeen): Error {

@@ -126,7 +126,7 @@ export class SignInGate {
   }
 
   /**
-   * the sign-in threw: a network break = a set-up problem (tried once more), the app's page too slow = Not checked in
+   * the sign-in threw: a network break = a set-up problem (tried once more), the app's page too slow = could not finish, in
    * plain words (run 864) - neither refuses the login for the run; anything else is the app refusing it
    */
   private signInBroke(login: string, e: unknown): never {

@@ -325,7 +325,7 @@ test('run 687: the first web case finds the sign-in page - BLOCKED with expected
   expect(String((err as Error).message)).toContain('Expected: the app signed in as Admin / Actual: the sign-in page');
 });
 
-test('run 864: the app\'s page too slow during the run\'s one sign-in - Not checked in plain words, the login NOT refused', async () => {
+test('run 864: the app\'s page too slow during the run\'s one sign-in - could not finish, in plain words, the login NOT refused', async () => {
   const f = new Fakes();
   const slow = new Error('page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to "https://app.x/", waiting until "domcontentloaded"');
   slow.name = 'TimeoutError';

@@ -4,11 +4,11 @@ import { notOpened } from '../../src/web/notOpened';
 
 /**
  * Test 8094 runs 865 / 866 (5 web runs at once, the app slow): "The Work plans page did not open within 20 s" was FAILED.
- * A page of the app that did not open in time is the environment - Not checked; an error the app showed stays FAILED.
+ * A page of the app that did not open in time is the environment - the test could not finish; an error the app showed stays FAILED.
  */
 const kind = (e: Error): string => kindOf(`${e.name}: ${e.message}`).kind;
 
-test('a page that did not open in time and the app showed nothing wrong: Not checked (slow), in plain words', () => {
+test('a page that did not open in time and the app showed nothing wrong: could not finish (slow), in plain words', () => {
   const e = notOpened('The Work plans page', 20, { statuses: [], message: '' });
   expect(e.name).toBe('SlowAnswer');
   expect(e.message).toBe('The Work plans page did not open within 20 s - not the app\'s answer');
@@ -27,7 +27,7 @@ test('the app\'s own call answered a server error while the page was opening: FA
   expect(kind(e)).toBe('failed');
 });
 
-test('boundary: answers below 500 (a not found, a sign-out) are not the app failing the page - still Not checked', () => {
+test('boundary: answers below 500 (a not found, a sign-out) are not the app failing the page - still could not finish', () => {
   expect(notOpened('The Invoices page', 20, { statuses: [404, 401, 403, 499], message: '' }).name).toBe('SlowAnswer');
 });
 

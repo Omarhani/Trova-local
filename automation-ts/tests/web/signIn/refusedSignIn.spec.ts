@@ -19,7 +19,7 @@ test('testVerifyThatTheWebShowsAMessageForAWrongPassword', async ({ page }) => {
   await login.clickNext();
   await login.insertUsername(e.userName);
   await login.insertPassword(wrongPasswordOf(employeePassword(false)));
-  const answered = refusalAnswered(await login.clickLoginAnswered(15), 15); // run 860: no answer = not checked
+  const answered = refusalAnswered(await login.clickLoginAnswered(15), 15); // run 860: no answer = could not finish
 
   const shown = await login.toasterMessage();
   checkTrue('Error message shown for the wrong password', shown !== '', shown ? `the app said "${shown}"` : `${answered}, but no message showed within 10 s`);

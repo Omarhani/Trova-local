@@ -14,7 +14,7 @@ async function errorShown(page: Page): Promise<string> {
 /**
  * Opens one of the app's pages: open() does the steps and says whether the page showed in time. Not shown (runs 865 /
  * 866): the app's error message or server error seen on the way = FAILED as Expected / Actual; nothing wrong seen =
- * the app was too slow - Not checked in plain words, never the app's wrong answer.
+ * the app was too slow - the test could not finish, in plain words, never the app's wrong answer.
  */
 export async function pageOpens(page: Page, what: string, seconds: number, open: () => Promise<boolean>): Promise<void> {
   const statuses: number[] = [];

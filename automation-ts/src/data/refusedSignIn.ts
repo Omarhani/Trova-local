@@ -24,7 +24,7 @@ export function expectedWrongLoginMessage(shown: string | undefined): string {
 
 /**
  * run 860: the sign-in's answer (its HTTP status) after Log in, or undefined when none came within waitS. No answer = the
- * case is not checked (SlowAnswer), never a "no message" failure; an answer = the message check decides, naming it.
+ * case could not finish (SlowAnswer), never a "no message" failure; an answer = the message check decides, naming it.
  */
 export function refusalAnswered(status: number | undefined, waitS: number): string {
   if (status === undefined) throw new SlowAnswer(`The app did not answer the sign-in within ${waitS} s - not the app's answer`);

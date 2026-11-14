@@ -35,7 +35,7 @@ test('the middle of an element is where a finger taps', () => {
 
 test('trap: a locator the snapshot cannot read is never guessed as present', () => {
   const e = (() => { try { ScreenSnapshot.of(xml).has('(//android.widget.Button)[2]'); return undefined; } catch (x) { return x as Error; } })();
-  expect(e?.name).toBe('SetUpProblem'); // our step, never the app: Not checked
+  expect(e?.name).toBe('SetUpProblem'); // our step, never the app: the test needs an update
   expect(e?.message).toBe('The test needs an update - the app looks fine: the test names a button or field in a way Trova cannot find on the phone screen');
 });
 
