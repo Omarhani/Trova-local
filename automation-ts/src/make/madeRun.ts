@@ -19,6 +19,8 @@ export interface MadeRun {
   setup: MadeAction[];
   /** clean-up: calls by API, or actions on the screens in full screen mode */
   cleanup: MadeAction[];
+  /** what Trova knows that matches the case's words (Business and the App map) - the picks its AI runs get; none in older records */
+  knowledge?: KnowledgePick[];
 }
 
 export interface MadeStep {
@@ -80,4 +82,16 @@ export interface ApiAction {
   keep?: Record<string, string>;
   /** call as this login instead of the run's */
   as?: string;
+}
+
+/** Hand-over 2026-11-14: one piece of Trova's knowledge picked for the case (search_knowledge), as Trova sends it */
+export interface KnowledgePick {
+  kind: 'rule' | 'entity' | 'actor' | 'page';
+  /** the Business area it belongs to (not for App map pages) */
+  areaId?: number;
+  /** a rule: its area; an entity or actor: its name; a page: its plain title ("Employees page") */
+  name: string;
+  text: string;
+  /** where it comes from in plain words ("Business > Employee", "App map > Employees page") */
+  source: string;
 }

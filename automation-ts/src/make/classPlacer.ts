@@ -1,3 +1,4 @@
+import { PageNamer } from './appMapNames';
 import { IndexedClass } from './codeIndex';
 import { MadeAction } from './madeRun';
 import { lowerFirst, pascal } from './names';
@@ -24,9 +25,9 @@ function withSuffix(stem: string, suffix: string): string {
   return stem.endsWith(suffix) ? stem : `${stem}${suffix}`;
 }
 
-/** the class an action belongs to: the one Trova linked, else a name from the page, screen or call */
-export function classOf(a: MadeAction): { area: AreaName; name: string } {
-  if (a.on === 'web') return { area: 'web', name: a.pageClass || withSuffix(pascal(a.page) || 'Home', 'Page') };
+/** the class an action belongs to: the one Trova linked, else the App map's name of the page, else a name from the page, screen or call */
+export function classOf(a: MadeAction, appMap: PageNamer = () => undefined): { area: AreaName; name: string } {
+  if (a.on === 'web') return { area: 'web', name: a.pageClass || withSuffix(pascal(appMap(a.page) ?? '') || pascal(a.page) || 'Home', 'Page') };
   if (a.on === 'phone') return { area: 'phone', name: a.screenClass || withSuffix(pascal(a.screen) || 'App', 'Screen') };
   const first = a.path.split(/[/?]/).find((p) => p && !p.startsWith('{') && !/^api$/i.test(p)) ?? 'App';
   return { area: 'api', name: `${pascal(first) || 'App'}${a.side === 'phone' ? 'Phone' : ''}Api` };

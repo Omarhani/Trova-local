@@ -1,3 +1,4 @@
+import { appMapNamer } from './appMapNames';
 import { caseTest, cleanUpTest } from './caseTests';
 import { cyclePicture } from './cyclePicture';
 import { CodeFile, Draft, DraftKind } from './draft';
@@ -21,7 +22,7 @@ function refusedDraft(kind: DraftKind, refused: string): Draft {
 function made(run: MadeRun, kind: DraftKind, code: CodeFile[]): Draft {
   const channel = channelOf(run);
   const project = new PomProject(code);
-  const parts = new PartMaker(project);
+  const parts = new PartMaker(project, appMapNamer(run.knowledge));
   const uses = new SpecUses();
   const method = testName(run.title, run.caseId);
   const main = caseTest(run, channel, parts, uses, method);

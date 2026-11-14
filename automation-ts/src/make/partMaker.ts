@@ -1,3 +1,4 @@
+import { PageNamer } from './appMapNames';
 import { addPart, newClass } from './classEditor';
 import { AREAS, AreaName, classOf, family, placeFor } from './classPlacer';
 import { locatorKey, ROW } from './locatorKey';
@@ -26,7 +27,7 @@ export class PartMaker {
   readonly reused: string[] = [];
   readonly added: string[] = [];
 
-  constructor(private readonly project: PomProject) {}
+  constructor(private readonly project: PomProject, private readonly appMap: PageNamer = () => undefined) {}
 
   ui(a: WebAction | PhoneAction, step: number): MethodRef {
     const kind = UI[a.action.toLowerCase()];
@@ -35,7 +36,7 @@ export class PartMaker {
     const key = a.locator ? locatorKey(a.locator) : undefined;
     if (!key) throw new MakeRefusal(`Step ${step}: the AI did not keep which element it used, so Trova cannot write it - run the case with the AI again.`);
     if (action === 'type' && key.includes(ROW)) throw new MakeRefusal(`Step ${step} types into one row of a list - Trova cannot write that yet, so this case is left for a person to automate.`);
-    const { area, name } = classOf(a);
+    const { area, name } = classOf(a, this.appMap);
     const found = reusedAction(family(this.project, area, name), action, key);
     if (found) return this.reuse(area, found);
     const where = a.on === 'web' ? a.page : a.screen;
@@ -44,7 +45,7 @@ export class PartMaker {
   }
 
   open(a: WebAction): MethodRef {
-    const { area, name } = classOf(a);
+    const { area, name } = classOf(a, this.appMap);
     const found = reusedOpen(family(this.project, area, name), a.page);
     if (found) return this.reuse(area, found);
     return this.add(area, name, `The ${a.page} page - parts written by Trova from a passed AI run.`,
@@ -52,7 +53,7 @@ export class PartMaker {
   }
 
   call(a: ApiAction): MethodRef {
-    const { area, name } = classOf(a);
+    const { area, name } = classOf(a, this.appMap);
     const endpoint = `${a.method.toUpperCase()} ${a.path}`;
     const found = reusedCall(family(this.project, area, name), endpoint);
     if (found) return this.reuse(area, found);

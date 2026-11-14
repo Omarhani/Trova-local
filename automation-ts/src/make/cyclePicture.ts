@@ -1,3 +1,4 @@
+import { knowledgeLines } from './knowledgeLines';
 import { ApiAction, MadeAction, MadeRun, MadeStep } from './madeRun';
 
 /** the value names an action reads or keeps ({holiday_name} -> holiday_name) */
@@ -42,7 +43,7 @@ function actors(run: MadeRun): string[] {
 /**
  * The business cycle of one case in plain words, before any code (writing-automation-script step 0): who acts, what is
  * made first and which step needs it, the steps in order, what is checked, what is undone at the end. A set-up no step
- * uses is flagged. No locator, call path or value is in it - the tester reads it before saving.
+ * uses is flagged; the business and App map pages Trova picked for the case are named with where they come from. No locator, call path or value is in it - the tester reads it before saving.
  */
 export function cyclePicture(run: MadeRun): string[] {
   const steps = run.steps.filter((s) => s.step > 0);
@@ -51,6 +52,7 @@ export function cyclePicture(run: MadeRun): string[] {
   const madeFirst = made(run);
   return [
     `Who: ${actors(run).join(', ')}`,
+    ...knowledgeLines(run.knowledge),
     ...(madeFirst.length ? madeFirst : ['Made first: nothing']),
     `Steps: ${steps.map((s) => `${s.step}. ${s.text.replace(/\s+/g, ' ').trim()}`).join(' > ')}`,
     `Checked: ${checked.length ? checked.join('; ') : 'nothing written'}`,
