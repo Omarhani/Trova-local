@@ -21,6 +21,11 @@ const MAPPED = `<html><body>${MENU}<script>fetch('/api/me');
   setInterval(() => fetch('https://maps.googleapis.com/maps/api/js/ViewportInfo'), 300);
 </script></body></html>`;
 
+// run 611: the app's own account lookup on opening answered in 3-7 s and held every block's open up to 5 s
+const SLOW_LOOKUP = `<html><body>${MENU}<script>fetch('/api/me');
+  fetch('/api/Account/GetAccountIdByCode', { method: 'POST' });
+</script></body></html>`;
+
 let browser: Browser;
 let page: Page;
 
@@ -41,6 +46,10 @@ test.beforeAll(async () => {
 
 test.afterAll(async () => {
   await browser.close();
+});
+
+test.afterEach(async () => {
+  await page.goto('about:blank'); // a call still open is cut here, never inside the next test's proof
 });
 
 test('an app whose first call answers 401 and goes to its sign-in page is refused, with the status', async () => {
@@ -72,6 +81,28 @@ test('a page whose map keeps calling Google is done once the app\'s own calls ar
   const start = Date.now();
   expect(await proveSignedIn(page, WEB)).toBeNull();
   expect(Date.now() - start).toBeLessThan(2900);
+});
+
+/** the account lookup answers only after 6 s (or never, when the next open cuts it) */
+async function slowLookup(): Promise<void> {
+  await page.route('http://app.test/api/Account/GetAccountIdByCode', async (r) => {
+    await new Promise((w) => setTimeout(w, 6000));
+    await r.fulfill({ status: 200, body: '{}' }).catch(() => undefined);
+  });
+}
+
+test('an own call that stays open does not hold a proved open to the 5 s limit (Test 8094 run 611)', async () => {
+  await app(SLOW_LOOKUP);
+  await slowLookup();
+  const start = Date.now();
+  expect(await proveSignedIn(page, WEB)).toBeNull();
+  expect(Date.now() - start).toBeLessThan(2900);
+});
+
+test('a call that answers 401 while another stays open is still refused', async () => {
+  await app(SLOW_LOOKUP, 401, 1200);
+  await slowLookup();
+  expect(await proveSignedIn(page, WEB)).toBe('its calls answered 401');
 });
 
 test('an app that makes no call of its own is not taken as signed in', async () => {
